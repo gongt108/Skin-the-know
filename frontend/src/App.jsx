@@ -82,8 +82,6 @@ class App extends React.Component {
 	login = (event) => {
 		event.preventDefault(); // Prevent the default form submission behavior
 		// Make a POST request to the "/api/login/" URL with the form data
-		console.log(this.state);
-		console.log(cookies.get('csrftoken'));
 		axios
 			.post(
 				'http://localhost:8000/api/login/',
@@ -102,7 +100,6 @@ class App extends React.Component {
 			.then(this.isResponseOk)
 			.then((response) => {
 				const data = response.data;
-				console.log(data);
 				this.setState({
 					isAuthenticated: true,
 					username: '',

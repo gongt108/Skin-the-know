@@ -13,21 +13,6 @@ SECRET_KEY = "django-insecure-9sx&+*--08@%m$!zvy_15@+k_g+r011jz$(j$#dz4vj-1&t6e$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-CSRF_TRUSTED_ORIGINS = (
-    [
-        # "http://localhost:8000",
-        "http://localhost:5173",
-    ],
-)
-ALLOWED_HOSTS = (
-    [
-        "localhost",
-    ],
-)
-CORS_ORIGIN_WHITELIST = [
-    # "http://localhost:8000",
-    "http://localhost:5173",
-]
 
 # Application definition
 
@@ -58,9 +43,35 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True  # Allow credentials to be included with requests
-# CORS_ALLOWED_ORIGINS = [
+
+
+CSRF_TRUSTED_ORIGINS = (
+    # "http://localhost:8000",
+    "http://localhost:5173",
+)
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
+# ALLOWED_HOSTS = (
+#     [
+#         "localhost",
+#     ],
+# )
+# CORS_ORIGIN_WHITELIST = [
+#     # "http://localhost:8000",
 #     "http://localhost:5173",
 # ]
+
+
+# Security settings
+CSRF_COOKIE_SAMESITE = "Strict"  # Set SameSite attribute of CSRF cookie to "Strict"
+SESSION_COOKIE_SAMESITE = (
+    "Strict"  # Set SameSite attribute of session cookie to "Strict"
+)
+CSRF_COOKIE_HTTPONLY = False  # Allow client-side JavaScript to access CSRF token cookie
+SESSION_COOKIE_HTTPONLY = (
+    True  # Prevent client-side JavaScript from accessing session cookie
+)
 
 ROOT_URLCONF = "skin_the_know.urls"
 
@@ -134,16 +145,6 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# Security settings
-CSRF_COOKIE_SAMESITE = "Strict"  # Set SameSite attribute of CSRF cookie to "Strict"
-SESSION_COOKIE_SAMESITE = (
-    "Strict"  # Set SameSite attribute of session cookie to "Strict"
-)
-CSRF_COOKIE_HTTPONLY = False  # Allow client-side JavaScript to access CSRF token cookie
-SESSION_COOKIE_HTTPONLY = (
-    True  # Prevent client-side JavaScript from accessing session cookie
-)
 
 
 # For production
