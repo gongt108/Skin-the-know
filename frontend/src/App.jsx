@@ -4,6 +4,7 @@ import Cookies from 'universal-cookie';
 import axios from 'axios';
 import Layout from './components/Layout';
 import Login from './components/auth/Login';
+import Signup from './components/auth/Signup';
 import './input.css';
 
 //instantiating Cookies class by creating cookies object
@@ -16,7 +17,7 @@ const App = () => {
 				<Routes>
 					{/* <Route path="/" exact component={Home} /> */}
 					<Route path="/login" element={<Login />} />
-					{/* <Route path="/signup" component={Signup} /> */}
+					<Route path="/signup" element={<Signup />} />
 				</Routes>
 			</Layout>
 		</Router>
