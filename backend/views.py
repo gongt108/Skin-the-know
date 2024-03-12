@@ -30,11 +30,11 @@ def login_view(request):
     return JsonResponse({"details": "Successfully logged in."})
 
 
-def signup_view(request):
+def register_view(request):
     data = json.loads(request.body)
     username = data.get("username")
     password = data.get("password")
-    confirm_password = data.get("confirm-password")
+    confirm_password = data.get("confirmPassword")
 
     if username is None or password is None:
         return JsonResponse({"detail": "Please enter username and password"})
@@ -43,7 +43,7 @@ def signup_view(request):
     else:
         user = User.objects.create_user(username=username, password=password)
         login(request, user)
-        return JsonResponse({"details": "Successfully signed up."})
+        return JsonResponse({"details": "Successfully registered user."})
 
 
 def logout_view(request):
