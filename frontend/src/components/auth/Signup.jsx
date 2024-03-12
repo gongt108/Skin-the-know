@@ -30,27 +30,36 @@ function Signup() {
 		} else {
 			setError('');
 			console.log('createUser');
-			const cookies = new Cookies();
 
-			// createUser(cookies)
+			createUser();
 		}
 	};
 
-	const createUser = (cookies) => {
-		axios.post(
-			'http://localhost:8000/api/register/',
-			{
-				username: newUser.username,
-				password: newUser.password,
-			},
-			{
-				headers: {
-					'Content-Type': 'application/json',
-					'X-CSRFToken': cookies.get('csrftoken'),
+	const createUser = () => {
+		const cookies = new Cookies();
+
+		axios
+			.post(
+				'http://localhost:8000/api/register/',
+				{
+					username: newUser.username,
+					password: newUser.password,
 				},
-				withCredentials: true,
-			}
-		);
+				{
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRFToken': cookies.get('csrftoken'),
+					},
+					withCredentials: true,
+				}
+			)
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((error) => {
+				console.error(error);
+				setError('Error creating user.');
+			});
 	};
 
 	return (

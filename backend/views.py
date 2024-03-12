@@ -34,12 +34,10 @@ def register_view(request):
     data = json.loads(request.body)
     username = data.get("username")
     password = data.get("password")
-    confirm_password = data.get("confirmPassword")
+    print(username)
 
     if username is None or password is None:
         return JsonResponse({"detail": "Please enter username and password"})
-    elif password != confirm_password:
-        return JsonResponse({"detail": "Your passwords do not match."})
     else:
         user = User.objects.create_user(username=username, password=password)
         login(request, user)
