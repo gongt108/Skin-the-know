@@ -38,7 +38,7 @@ function Carousel({ props }) {
 	return (
 		<div
 			id="default-carousel"
-			className="relative w-1/2 h-1/2 mx-auto"
+			className="relative h-1/2 flex mx-auto w-[60rem]"
 			data-carousel="slide"
 		>
 			{/* Carousel wrapper */}
