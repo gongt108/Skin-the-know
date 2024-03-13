@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
+import Home from './Home';
 import Layout from './components/Layout';
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup';
@@ -15,7 +16,7 @@ const App = () => {
 		<Router>
 			<Layout>
 				<Routes>
-					{/* <Route path="/" exact component={Home} /> */}
+					<Route path="/" exact element={<Home />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/signup" element={<Signup />} />
 				</Routes>
