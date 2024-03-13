@@ -28,21 +28,21 @@ function Carousel({ props }) {
 	};
 
 	const nextSlide = () => {
-		setCurrentSlide((prevSlide) => (prevSlide === 4 ? 0 : prevSlide + 1));
+		setCurrentSlide((prevSlide) => (prevSlide === 2 ? 0 : prevSlide + 1));
 	};
 
 	const prevSlide = () => {
-		setCurrentSlide((prevSlide) => (prevSlide === 0 ? 4 : prevSlide - 1));
+		setCurrentSlide((prevSlide) => (prevSlide === 0 ? 2 : prevSlide - 1));
 	};
 
 	return (
 		<div
 			id="default-carousel"
-			className="relative w-full h-1/2"
+			className="relative w-1/2 h-1/2 mx-auto"
 			data-carousel="slide"
 		>
 			{/* Carousel wrapper */}
-			<div className="relative h-full overflow-hidden rounded-lg">
+			<div className="relative h-full overflow-hidden rounded-lg w-full mx-auto">
 				{/* Carousel items */}
 				{data.map((item, index) => (
 					<div
@@ -52,14 +52,14 @@ function Carousel({ props }) {
 						}`}
 						data-carousel-item
 					>
-						<div className="absolute bottom-0 w-full bg-slate-500 text-center z-10">
-							<h2 className=" text-white font-semibold text-center z-10">
+						<div className="absolute top-0 bg-slate-500/50 w-full text-center z-10">
+							<h2 className="text-3xl flex items-center justify-center text-white font-semibold text-center z-10 h-16">
 								{item.title}
 							</h2>
 						</div>
 						<img
 							src={item.imgSrc}
-							className="flex object-cover mx-auto w-1/2 "
+							className="flex object-cover w-full "
 							alt={item.title}
 						/>
 					</div>
@@ -89,6 +89,24 @@ function Carousel({ props }) {
 				onClick={prevSlide}
 			>
 				{/* Previous button */}
+				<span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+					<svg
+						class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
+						aria-hidden="true"
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 6 10"
+					>
+						<path
+							stroke="currentColor"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M5 1 1 5l4 4"
+						/>
+					</svg>
+					<span class="sr-only">Previous</span>
+				</span>
 			</button>
 			<button
 				type="button"
@@ -97,6 +115,24 @@ function Carousel({ props }) {
 				onClick={nextSlide}
 			>
 				{/* Next button */}
+				<span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+					<svg
+						class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
+						aria-hidden="true"
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 6 10"
+					>
+						<path
+							stroke="currentColor"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="m1 9 4-4-4-4"
+						/>
+					</svg>
+					<span class="sr-only">Next</span>
+				</span>
 			</button>
 		</div>
 	);
