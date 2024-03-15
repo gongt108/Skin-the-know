@@ -20,20 +20,20 @@ class Ingredient(models.Model):
 
 
 class Brand(models.Model):
-    name = models.CharField()
-    img_url = models.CharField(null=True)
+    name = models.CharField(max_length=100)
+    img_url = models.CharField(max_length=255, null=True)
 
 
 class Product(models.Model):
-    name = models.CharField()
+    name = models.CharField(max_length=100)
     brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, null=True)
-    ingredients = models.ManyToManyField(
-        Ingredient, on_delete=models.SET_NULL, null=True
+    ingredients = models.ManyToManyField(Ingredient, blank=True)
+    main_active = models.ForeignKey(
+        Ingredient, related_name="main_active", on_delete=models.SET_NULL, null=True
     )
-    main_active = models.ForeignKey(Ingredient, on_delete=models.SET_NULL, null=True)
     skin_concern = models.ManyToManyField("SkinConcern", blank=True)
-    img_url = models.CharField(null=True)
-    incidecoder_url = models.CharField(null=True)
+    img_url = models.CharField(max_length=255, null=True)
+    incidecoder_url = models.URLField(null=True)
 
 
 class SkinConcern(models.Model):
