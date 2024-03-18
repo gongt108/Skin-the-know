@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Ingredient(models.Model):
     name = models.CharField(max_length=100)
+    alias = models.CharField(max_length=255, null=True, blank=True)
     good_list = models.ManyToManyField(
         "self", symmetrical=False, related_name="good_for", blank=True
     )
@@ -15,7 +16,7 @@ class Ingredient(models.Model):
         "self", symmetrical=False, related_name="use_with_caution", blank=True
     )
     incidecoder_url = models.URLField(null=True)
-    img_url = models.URLField(null=True)
+    img_url = models.URLField(null=True, blank=True)
     skin_concern = models.ManyToManyField("SkinConcern", blank=True)
 
 
@@ -34,6 +35,7 @@ class Product(models.Model):
     skin_concern = models.ManyToManyField("SkinConcern", blank=True)
     img_url = models.CharField(max_length=255, null=True)
     incidecoder_url = models.URLField(null=True)
+    product_link = models.URLField(null=True, blank=True)
 
 
 class SkinConcern(models.Model):

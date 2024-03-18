@@ -1,12 +1,15 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.core.serializers import serialize
 from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import json
+
+from .models import Product
 
 
 @api_view(["GET"])
@@ -62,3 +65,17 @@ def whoami_view(request):
     if not request.user.is_authenticated:
         return JsonResponse({"isauthenticated": False})
     return JsonResponse({"username": request.user.username})
+
+
+def get_all_products(request):
+    all_products = Product.objects.all()
+    json_data = serialize("json", all_products)
+    data = json.loads(json_data)
+
+    # Extract the 'fields' attribute from each dictionary
+    fields_data = [item["fields"] for item in data]
+
+    # Print the fields data
+    print(fields_data)
+
+    return JsonResponse(fields_data, safe=False)
