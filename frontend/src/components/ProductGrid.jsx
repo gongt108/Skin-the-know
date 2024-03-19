@@ -6,7 +6,6 @@ function ProductGrid() {
 		axios
 			.get('http://localhost:8000/api/allproducts')
 			.then((response) => {
-				console.log(response.data);
 				setProducts(response.data);
 			})
 			.catch((err) => {
@@ -14,9 +13,12 @@ function ProductGrid() {
 			});
 	}, []);
 	return (
-		<div>
-			Products
-			<div className="grid grid-cols-4 gap-4">
+		<div className="mx-auto w-[60rem]">
+			<div className="grid grid-cols-5 gap-4">
+				<div className="bg-gray-300 py-4 text-2xl font-semibold row-span-2 flex items-center justify-center text-center">
+					Top Rated Products
+				</div>
+
 				{products &&
 					products.map((product) => (
 						<div className="relative group" key={product.pk}>
@@ -27,7 +29,7 @@ function ProductGrid() {
 									alt="product image"
 								/>
 							</a>
-							<div className="absolute bottom-0 flex flex-col bg-slate-200 w-full p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+							<div className="absolute bottom-0 flex flex-col bg-slate-200 w-full p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-100">
 								<h2 className="truncate">{product.name}</h2>
 							</div>
 							{/* Add more product details here */}

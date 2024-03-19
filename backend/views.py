@@ -75,7 +75,4 @@ def get_all_products(request):
     # Extract the 'fields' attribute from each dictionary
     fields_data = [item["fields"] for item in data]
 
-    # Print the fields data
-    print(fields_data)
-
     return JsonResponse(fields_data, safe=False)
