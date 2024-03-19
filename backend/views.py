@@ -87,9 +87,7 @@ def get_product_data(request, unique_identifier):
         product_data = {
             "name": product_info.name,
             "brand": product_info.brand.name if product_info.brand else None,
-            "ingredients": [
-                ingredient.name for ingredient in product_info.ingredients.all()
-            ],
+            "ingredients": [],
             "main_active": (
                 product_info.main_active.name if product_info.main_active else None
             ),
@@ -105,9 +103,34 @@ def get_product_data(request, unique_identifier):
             "num_reviews": product_info.num_reviews,
             "unique_identifier": product_info.unique_identifier,
         }
+        # Iterate over each ingredient
+        for ingredient in product_info.ingredients.all():
+            # Get the bad list ingredients for this ingredient
+            avoid_list_ingredients = [
+                {
+                    "name": bad_ingredient.name,
+                    "alias": bad_ingredient.alias,
+                    "incidecoder_url": bad_ingredient.incidecoder_url,
+                    "img_url": bad_ingredient.img_url,
+                    # Include other fields as needed
+                }
+                for bad_ingredient in ingredient.avoid_list.all()
+            ]
+
+            # Append the ingredient details along with its bad list to the ingredients list
+            product_data["ingredients"].append(
+                {
+                    "name": ingredient.name,
+                    "alias": ingredient.alias,
+                    "incidecoder_url": ingredient.incidecoder_url,
+                    "img_url": ingredient.img_url,
+                    # Include other fields as needed
+                    "avoid_list": avoid_list_ingredients,
+                }
+            )
 
         print(product_data)
-        return JsonResponse(product_data)
+        return JsonResponse(product_data, safe=False)
     else:
         # Return a JsonResponse indicating that the product does not exist
         return JsonResponse({"error": "Product not found"}, status=404)
