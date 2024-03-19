@@ -12,6 +12,7 @@ function ProductGrid() {
 				console.error('Error retrieving products:', err);
 			});
 	}, []);
+
 	return (
 		<div className="mx-auto w-[60rem]">
 			<div className="grid grid-cols-5 gap-4">
@@ -22,7 +23,7 @@ function ProductGrid() {
 				{products &&
 					products.map((product) => (
 						<div className="relative group" key={product.pk}>
-							<a href="/">
+							<a href={`/product/${product.unique_identifier}`}>
 								<img
 									src={product.img_url}
 									className="w-60 h-60 rounded-lg object-contain"
