@@ -76,3 +76,38 @@ def get_all_products(request):
     fields_data = [item["fields"] for item in data]
 
     return JsonResponse(fields_data, safe=False)
+
+
+def get_product_data(request, unique_identifier):
+    product_info = Product.objects.filter(unique_identifier=unique_identifier).first()
+
+    if product_info:
+
+        # Serialize the Product object into a dictionary
+        product_data = {
+            "name": product_info.name,
+            "brand": product_info.brand.name if product_info.brand else None,
+            "ingredients": [
+                ingredient.name for ingredient in product_info.ingredients.all()
+            ],
+            "main_active": (
+                product_info.main_active.name if product_info.main_active else None
+            ),
+            "skin_concern": [
+                concern.name for concern in product_info.skin_concern.all()
+            ],
+            "img_url": product_info.img_url,
+            "incidecoder_url": product_info.incidecoder_url,
+            "product_link": product_info.product_link,
+            "rating": (
+                float(product_info.rating) if product_info.rating is not None else None
+            ),
+            "num_reviews": product_info.num_reviews,
+            "unique_identifier": product_info.unique_identifier,
+        }
+
+        print(product_data)
+        return JsonResponse(product_data)
+    else:
+        # Return a JsonResponse indicating that the product does not exist
+        return JsonResponse({"error": "Product not found"}, status=404)
