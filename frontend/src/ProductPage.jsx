@@ -70,11 +70,11 @@ function ProductPage() {
 							</ul>
 
 							<h4 className="font-semibold text-lg mt-8">Breakdown</h4>
-							<table className="table-auto">
+							<table className="table-auto w-full">
 								<thead>
 									<tr>
-										<th className="px-4 py-2">Ingredient Name</th>
-										<th className="px-4 py-2">Avoid List</th>
+										<th className="w-2/5 px-4 py-2 border">Ingredient </th>
+										<th className="px-4 py-2 border w-3/5">Avoid </th>
 									</tr>
 								</thead>
 								<tbody>
