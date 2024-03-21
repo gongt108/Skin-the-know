@@ -43,9 +43,9 @@ function Navbar() {
 							>
 								<path
 									stroke="currentColor"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth="2"
 									d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
 								/>
 							</svg>
@@ -68,9 +68,9 @@ function Navbar() {
 							>
 								<path
 									stroke="currentColor"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth="2"
 									d="M1 1h15M1 7h15M1 13h15"
 								/>
 							</svg>
@@ -100,7 +100,7 @@ function Navbar() {
 							</li>
 							<li>
 								<a
-									href="#"
+									href="/ingredients"
 									className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
 								>
 									Ingredients
@@ -146,7 +146,7 @@ function Navbar() {
 				<input
 					type="text"
 					id="search-navbar"
-					class="block w-full py-4 p-2 ps-10 text-sm text-gray-900 bg-gray-300/50  focus:outline-none"
+					className="block w-full py-4 p-2 ps-10 text-sm text-gray-900 bg-gray-300/50  focus:outline-none"
 					placeholder="Search..."
 				/>
 			</div>

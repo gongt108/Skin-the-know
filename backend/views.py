@@ -140,6 +140,11 @@ def get_all_ingredients(request):
     all_ingredients = Ingredient.objects.all()
     json_data = serialize("json", all_ingredients)
     data = json.loads(json_data)
-    fields_data = [item["fields"] for item in data]
 
-    return JsonResponse(fields_data, safe=False)
+    ingredients_data = []
+    for item in data:
+        fields = item["fields"]
+        fields["pk"] = item["pk"]  # Add 'pk' to the fields dictionary
+        ingredients_data.append(fields)
+
+    return JsonResponse(ingredients_data, safe=False)

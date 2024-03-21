@@ -8,6 +8,7 @@ import Login from './components/auth/Login';
 import Signup from './components/auth/Signup';
 import ProductPage from './ProductPage';
 import AddProduct from './AddProduct';
+import IngredientsList from './IngredientsList';
 import './input.css';
 
 //instantiating Cookies class by creating cookies object
@@ -23,6 +24,7 @@ const App = () => {
 					<Route path="/signup" element={<Signup />} />
 					<Route path="/addproduct" element={<AddProduct />} />
 					<Route path="/product/:slug" element={<ProductPage />} />
+					<Route path="/ingredients" element={<IngredientsList />} />
 				</Routes>
 			</Layout>
 		</Router>
