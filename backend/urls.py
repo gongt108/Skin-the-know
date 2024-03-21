@@ -9,6 +9,7 @@ urlpatterns = [
     path("session/", views.session_view, name="api-session"),
     path("whoami/", views.whoami_view, name="api-whoami"),
     path("allproducts/", views.get_all_products, name="get_all_products"),
+    path("ingredients_list/", views.get_all_ingredients, name="get_ingredients_list"),
     path(
         "product/<str:unique_identifier>",
         views.get_product_data,

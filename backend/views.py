@@ -9,7 +9,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import json
 
-from .models import Product
+from .models import Product, Ingredient
 
 
 @api_view(["GET"])
@@ -134,3 +134,12 @@ def get_product_data(request, unique_identifier):
     else:
         # Return a JsonResponse indicating that the product does not exist
         return JsonResponse({"error": "Product not found"}, status=404)
+
+
+def get_all_ingredients(request):
+    all_ingredients = Ingredient.objects.all()
+    json_data = serialize("json", all_ingredients)
+    data = json.loads(json_data)
+    fields_data = [item["fields"] for item in data]
+
+    return JsonResponse(fields_data, safe=False)
