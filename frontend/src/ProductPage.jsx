@@ -24,15 +24,15 @@ function ProductPage() {
 	return (
 		<div className="w-[60rem] mx-auto flex">
 			{productInfo && (
-				<div className="flex">
+				<div className="flex w-full">
 					<div className="w-1/2 h-full p-16">
 						<img
 							src={productInfo.img_url}
 							alt="product image"
-							className="w-full h-full p-4"
+							className="w-68 p-4 mx-auto"
 						/>
 					</div>
-					<div className="w-1/2 h-full">
+					<div className="w-1/2 h-full ">
 						<div className="border-b">
 							<h2 className="font-semibold text-2xl mt-24">
 								{productInfo.name}
@@ -86,9 +86,9 @@ function ProductPage() {
 												</a>
 											</td>
 											<td className="border px-4 py-2">
-												{ingredient.avoid_list.map((avoidItem, avoidIndex) => (
-													<div key={avoidIndex}>{avoidItem.name}</div>
-												))}
+												{ingredient.avoid_list
+													.map((avoidItem, avoidIndex) => avoidItem.name)
+													.join(', ')}
 											</td>
 										</tr>
 									))}

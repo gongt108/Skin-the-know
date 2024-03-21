@@ -10,13 +10,9 @@ class Ingredient(models.Model):
     good_list = models.ManyToManyField(
         "self", symmetrical=False, related_name="good_for", blank=True
     )
-    avoid_list = models.ManyToManyField(
-        "self", symmetrical=False, related_name="to_avoid", blank=True
-    )
-    caution_list = models.ManyToManyField(
-        "self", symmetrical=False, related_name="use_with_caution", blank=True
-    )
-    incidecoder_url = models.URLField(null=True)
+    avoid_list = models.ManyToManyField("self", symmetrical=True, blank=True)
+    caution_list = models.ManyToManyField("self", symmetrical=True, blank=True)
+    incidecoder_url = models.URLField(null=True, blank=True)
     img_url = models.URLField(null=True, blank=True)
     skin_concern = models.ManyToManyField("SkinConcern", blank=True)
 
