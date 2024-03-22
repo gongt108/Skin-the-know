@@ -70,15 +70,15 @@ def whoami_view(request):
     return JsonResponse({"username": request.user.username})
 
 
-def get_all_products(request):
-    all_products = Product.objects.all()
-    json_data = serialize("json", all_products)
-    data = json.loads(json_data)
+# def get_all_products(request):
+#     all_products = Product.objects.all()
+#     json_data = serialize("json", all_products)
+#     data = json.loads(json_data)
 
-    # Extract the 'fields' attribute from each dictionary
-    fields_data = [item["fields"] for item in data]
+#     # Extract the 'fields' attribute from each dictionary
+#     fields_data = [item["fields"] for item in data]
 
-    return JsonResponse(fields_data, safe=False)
+#     return JsonResponse(fields_data, safe=False)
 
 
 def get_product_data(request, unique_identifier):
@@ -139,18 +139,18 @@ def get_product_data(request, unique_identifier):
         return JsonResponse({"error": "Product not found"}, status=404)
 
 
-def get_all_ingredients(request):
-    all_ingredients = Ingredient.objects.all()
-    json_data = serialize("json", all_ingredients)
-    data = json.loads(json_data)
+# def get_all_ingredients(request):
+#     all_ingredients = Ingredient.objects.all()
+#     json_data = serialize("json", all_ingredients)
+#     data = json.loads(json_data)
 
-    ingredients_data = []
-    for item in data:
-        fields = item["fields"]
-        fields["pk"] = item["pk"]  # Add 'pk' to the fields dictionary
-        ingredients_data.append(fields)
+#     ingredients_data = []
+#     for item in data:
+#         fields = item["fields"]
+#         fields["pk"] = item["pk"]  # Add 'pk' to the fields dictionary
+#         ingredients_data.append(fields)
 
-    return JsonResponse(ingredients_data, safe=False)
+#     return JsonResponse(ingredients_data, safe=False)
 
 
 class ProductViewSet(viewsets.ViewSet):
