@@ -6,7 +6,7 @@ function IngredientsList() {
 	const [ingredients, setIngredients] = useState();
 	useEffect(() => {
 		axios
-			.get('http://localhost:8000/api/ingredients_list/')
+			.get('http://localhost:8000/api/ingredients/')
 			.then((response) => {
 				let data = response.data;
 				data.sort((a, b) => a.name.localeCompare(b.name));
@@ -23,7 +23,7 @@ function IngredientsList() {
 			{ingredients &&
 				ingredients.map((ingredient, i) => (
 					<div key={i}>
-						{ingredient.name} {ingredient.pk}
+						{ingredient.name} {ingredient.id}
 					</div>
 				))}
 		</div>

@@ -4,7 +4,7 @@ function ProductGrid() {
 	const [products, setProducts] = useState([]);
 	useEffect(() => {
 		axios
-			.get('http://localhost:8000/api/allproducts')
+			.get('http://localhost:8000/api/products/')
 			.then((response) => {
 				setProducts(response.data);
 			})

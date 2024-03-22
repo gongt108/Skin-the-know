@@ -1,15 +1,18 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.serializers import serialize
 from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
-from rest_framework.decorators import api_view
+
+from rest_framework import viewsets
+from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 import json
 
 from .models import Product, Ingredient
+from .serializers import ProductSerializer, IngredientSerializer
 
 
 @api_view(["GET"])
@@ -148,3 +151,36 @@ def get_all_ingredients(request):
         ingredients_data.append(fields)
 
     return JsonResponse(ingredients_data, safe=False)
+
+
+class ProductViewSet(viewsets.ViewSet):
+    def list(self, request):
+        queryset = Product.objects.all()
+        serializer = ProductSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = Product.objects.all()
+        product = get_object_or_404(queryset, pk=pk)
+        serializer = ProductSerializer(product)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=["get"])
+    def ingredients(self, request, pk=None):
+        product = self.get_object()
+        ingredients = product.ingredients.all()
+        serializer = IngredientSerializer(ingredients, many=True)
+        return Response(serializer.data)
+
+
+class IngredientViewSet(viewsets.ViewSet):
+    def list(self, request):
+        queryset = Ingredient.objects.all()
+        serializer = IngredientSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = Ingredient.objects.all()
+        ingredient = get_object_or_404(queryset, pk=pk)
+        serializer = IngredientSerializer(ingredient)
+        return Response(serializer.data)
