@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import scrapy
-from spider.items import IngredientListItem
+from spider.items import IngredientListItem, ProductItem
 
 
 class QuotesSpider(scrapy.Spider):
@@ -35,6 +35,13 @@ class QuotesSpider(scrapy.Spider):
             yield response.follow(next_page_url, callback=self.parse)
 
     def parse_product_page(self, response):
+        product_item = ProductItem()
+        product_item["incidecoder_url"] = response.meta.get("product_url")
+        product_item["name"] = response.css("span#product-title ::text").get()
+        product_item["brand"] = response.css("span#product-brand-title a ::text").get()
+
+        yield product_item
+
         ingredient_item = IngredientListItem()
         ingredients = response.css("div#ingredlist-short").css("span")
         # print(ingredients)

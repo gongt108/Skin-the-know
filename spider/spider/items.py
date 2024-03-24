@@ -10,3 +10,10 @@ class IngredientListItem(scrapy.Item):
     # define the fields for your item here like:
     name = scrapy.Field()
     incidecoder_url = scrapy.Field()
+
+
+class ProductItem(scrapy.Item):
+    # define the fields for your item here like:
+    name = scrapy.Field()
+    brand = scrapy.Field()
+    incidecoder_url = scrapy.Field()
