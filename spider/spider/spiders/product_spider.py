@@ -11,7 +11,7 @@ class QuotesSpider(scrapy.Spider):
     custom_settings = {
         "FEEDS": {"booksdata.json": {"format": "json", "overwrite": True}},
         # "ITEM_PIPELINES": {
-        # "spider.pipelines.IngredientListPipeline": 300,
+        #     "spider.pipelines.IngredientListPipeline": 300,
         # "spider.pipelines.SaveToPostgresPipeline": 400,
         # },
     }
@@ -27,7 +27,11 @@ class QuotesSpider(scrapy.Spider):
             relative_url = product.css("::attr(href)").get()
             product_url = "https://incidecoder.com" + relative_url
 
-            yield response.follow(product_url, callback=self.parse_product_page)
+            yield response.follow(
+                product_url,
+                callback=self.parse_product_page,
+                meta={"product_url": product_url},
+            )
 
         next_page = response.css("div.center.fs16 a ::attr(href)").get()
         if next_page is not None:
@@ -40,11 +44,9 @@ class QuotesSpider(scrapy.Spider):
         product_item["name"] = response.css("span#product-title ::text").get()
         product_item["brand"] = response.css("span#product-brand-title a ::text").get()
 
-        yield product_item
-
-        ingredient_item = IngredientListItem()
+        # ingredient_item = IngredientListItem()
         ingredients = response.css("div#ingredlist-short").css("span")
-        # print(ingredients)
+        ingredient_list = []
         for ingredient in ingredients:
             ingredient_text = ingredient.css("a::text").get()
 
@@ -52,11 +54,13 @@ class QuotesSpider(scrapy.Spider):
             ingredient_url = ingredient.css("a").xpath("@href").get()
 
             # Create a dictionary for the ingredient and its URL
-            # ingredient_dict = {"name": ingredient_text, "url": ingredient_url}
+            ingredient_dict = {"name": ingredient_text, "url": ingredient_url}
 
             # Append the dictionary to the list
             if ingredient_text is not None:
                 # ingredient_item["ingredient"] = ingredient_dict
-                ingredient_item["name"] = ingredient_text
-                ingredient_item["incidecoder_url"] = ingredient_url
-                yield ingredient_item
+
+                ingredient_list.append(ingredient_dict)
+        product_item["ingredients"] = ingredient_list
+
+        yield product_item

@@ -1,6 +1,9 @@
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 
+# class ProductItemPipeline:
+#     def process_item(self, item, spider):
+
 
 class IngredientListPipeline:
     def process_item(self, item, spider):
