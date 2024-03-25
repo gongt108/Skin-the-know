@@ -2,15 +2,25 @@
 from itemadapter import ItemAdapter
 
 
-# class ProductItemPipeline:
-#     def process_item(self, item, spider):
-#         adapter = ItemAdapter(item)
-#         adapter["name"] = item["name"]
-#         adapter["brand"] = item["brand"]
-#         adapter["ingredients"] = item["ingredients"]
-#         url = item["incidecoder_url"]
-#         adapter["incidecoder_url"] = f"https://incidecoder.com{url}"
-#         return item
+class ProductItemPipeline:
+    def process_item(self, item, spider):
+        adapter = ItemAdapter(item)
+
+        field_names = adapter.field_names()
+        for field_name in field_names:
+            if field_name != "unique_identifier":
+                adapter[field_name] = adapter.get(field_name)
+            elif field_name == "unique_identifier":
+                adapter["unique_identifier"] = adapter.get("unique_identifier").replace(
+                    "/products/", ""
+                )
+
+        # adapter["name"] = item["name"]
+        # adapter["brand"] = item["brand"]
+        # adapter["ingredients"] = item["ingredients"]
+        # url = item["incidecoder_url"]
+        # adapter["incidecoder_url"] = f"https://incidecoder.com{url}"
+        return item
 
 
 class IngredientListPipeline:
@@ -81,6 +91,7 @@ class SaveProductToPostgresPipeline:
             brand_id INT,
             incidecoder_url VARCHAR(255),
             img_url VARCHAR(255),
+            unique_identifier VARCHAR(255),
             num_reviews INT,
             rating FLOAT
         )
@@ -167,6 +178,7 @@ class SaveProductToPostgresPipeline:
                         brand_id,
                         incidecoder_url,
                         img_url,
+                        unique_identifier,
                         num_reviews,
                         rating
                     ) VALUES(
@@ -175,9 +187,18 @@ class SaveProductToPostgresPipeline:
                         %s,
                         %s,
                         %s,
+                        %s,
                         %s
                     ) RETURNING id""",
-                    (product_name, brand_id, incidecoder_url, item["img_url"], 0, 0.0),
+                    (
+                        product_name,
+                        brand_id,
+                        incidecoder_url,
+                        item["img_url"],
+                        item["unique_identifier"],
+                        0,
+                        0.0,
+                    ),
                 )
                 product_id = self.cur.fetchone()[0]
 

@@ -41,20 +41,20 @@ class Product(models.Model):
         max_digits=3, decimal_places=1, null=True, blank=True, default=0.0
     )
     num_reviews = models.IntegerField(default=0)
-    # unique_identifier = models.CharField(
-    #     max_length=255, blank=True, editable=False, unique=True
-    # )
+    unique_identifier = models.CharField(
+        max_length=255, blank=True, editable=False, unique=True
+    )
 
-    # def save(self, *args, **kwargs):
-    #     # Generate unique identifier using brand name and product name
-    #     if not self.unique_identifier:
-    #         self.unique_identifier = self.generate_unique_identifier()
-    #     super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        # Generate unique identifier using brand name and product name
+        if not self.unique_identifier:
+            self.unique_identifier = self.generate_unique_identifier()
+        super().save(*args, **kwargs)
 
-    # def generate_unique_identifier(self):
-    #     brand_name_slug = slugify(self.brand.name)
-    #     product_name_slug = slugify(self.name)
-    #     return f"{brand_name_slug}-{product_name_slug}"
+    def generate_unique_identifier(self):
+        brand_name_slug = slugify(self.brand.name)
+        product_name_slug = slugify(self.name)
+        return f"{brand_name_slug}-{product_name_slug}"
 
 
 class SkinConcern(models.Model):

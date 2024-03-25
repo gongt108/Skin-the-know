@@ -11,13 +11,13 @@ class QuotesSpider(scrapy.Spider):
     custom_settings = {
         "FEEDS": {"booksdata.json": {"format": "json", "overwrite": True}},
         "ITEM_PIPELINES": {
-            # "spider.pipelines.ProductItemPipeline": 300,
+            "spider.pipelines.ProductItemPipeline": 300,
             "spider.pipelines.SaveProductToPostgresPipeline": 400,
         },
     }
 
     def start_requests(self):
-        urls = ["https://incidecoder.com/brands/clio"]
+        urls = ["https://incidecoder.com/brands/krave"]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
 
@@ -30,7 +30,7 @@ class QuotesSpider(scrapy.Spider):
             yield response.follow(
                 product_url,
                 callback=self.parse_product_page,
-                meta={"product_url": product_url},
+                meta={"product_url": product_url, "relative_url": relative_url},
             )
 
         next_page = response.css("div.center.fs16 a ::attr(href)").get()
@@ -46,6 +46,7 @@ class QuotesSpider(scrapy.Spider):
         product_item["img_url"] = response.css(
             "div#product-main-image img::attr(src)"
         ).get()
+        product_item["unique_identifier"] = response.meta.get("relative_url")
 
         # ingredient_item = IngredientListItem()
         ingredients = response.css("div#ingredlist-short").css("span")
