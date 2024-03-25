@@ -5,7 +5,7 @@ from spider.items import IngredientListItem
 
 
 class QuotesSpider(scrapy.Spider):
-    name = "products"
+    name = "ingredients"
     allowed_domains = ["incidecoder.com"]
 
     custom_settings = {

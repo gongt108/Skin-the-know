@@ -5,7 +5,7 @@ from django.utils.text import slugify
 
 # Create your models here.
 class Ingredient(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=255)
     alias = models.CharField(max_length=255, null=True, blank=True)
     good_list = models.ManyToManyField(
         "self", symmetrical=False, related_name="good_for", blank=True

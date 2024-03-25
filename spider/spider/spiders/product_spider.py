@@ -10,14 +10,14 @@ class QuotesSpider(scrapy.Spider):
 
     custom_settings = {
         "FEEDS": {"booksdata.json": {"format": "json", "overwrite": True}},
-        # "ITEM_PIPELINES": {
-        #     "spider.pipelines.IngredientListPipeline": 300,
-        # "spider.pipelines.SaveToPostgresPipeline": 400,
-        # },
+        "ITEM_PIPELINES": {
+            # "spider.pipelines.ProductItemPipeline": 300,
+            "spider.pipelines.SaveProductToPostgresPipeline": 400,
+        },
     }
 
     def start_requests(self):
-        urls = ["https://incidecoder.com/brands/some-by-mi"]
+        urls = ["https://incidecoder.com/brands/krave"]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
 
@@ -54,7 +54,10 @@ class QuotesSpider(scrapy.Spider):
             ingredient_url = ingredient.css("a").xpath("@href").get()
 
             # Create a dictionary for the ingredient and its URL
-            ingredient_dict = {"name": ingredient_text, "url": ingredient_url}
+            ingredient_dict = {
+                "name": ingredient_text,
+                "url": f"https://incidecoder.com{ingredient_url}",
+            }
 
             # Append the dictionary to the list
             if ingredient_text is not None:
