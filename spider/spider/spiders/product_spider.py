@@ -17,7 +17,7 @@ class QuotesSpider(scrapy.Spider):
     }
 
     def start_requests(self):
-        urls = ["https://incidecoder.com/brands/krave"]
+        urls = ["https://incidecoder.com/brands/clio"]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
 
@@ -43,6 +43,9 @@ class QuotesSpider(scrapy.Spider):
         product_item["incidecoder_url"] = response.meta.get("product_url")
         product_item["name"] = response.css("span#product-title ::text").get()
         product_item["brand"] = response.css("span#product-brand-title a ::text").get()
+        product_item["img_url"] = response.css(
+            "div#product-main-image img::attr(src)"
+        ).get()
 
         # ingredient_item = IngredientListItem()
         ingredients = response.css("div#ingredlist-short").css("span")

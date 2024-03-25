@@ -18,3 +18,4 @@ class ProductItem(scrapy.Item):
     brand = scrapy.Field()
     ingredients = scrapy.Field()
     incidecoder_url = scrapy.Field()
+    img_url = scrapy.Field()

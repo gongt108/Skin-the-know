@@ -80,6 +80,7 @@ class SaveProductToPostgresPipeline:
             name text,
             brand_id INT,
             incidecoder_url VARCHAR(255),
+            img_url VARCHAR(255),
             num_reviews INT,
             rating FLOAT
         )
@@ -105,7 +106,7 @@ class SaveProductToPostgresPipeline:
 
         # Check if the incidecoder_url is already in the database
         product_id = self.find_or_create_product(
-            item["name"], brand_id, item["incidecoder_url"]
+            item, item["name"], brand_id, item["incidecoder_url"]
         )
 
         # Create relationships between product and ingredients
@@ -145,7 +146,7 @@ class SaveProductToPostgresPipeline:
                 self.connection.rollback()
                 print(f"Error inserting brand into database: {e}")
 
-    def find_or_create_product(self, product_name, brand_id, incidecoder_url):
+    def find_or_create_product(self, item, product_name, brand_id, incidecoder_url):
         # Check if the incidecoder_url is already in the database
         self.cur.execute(
             "SELECT id FROM backend_product WHERE incidecoder_url = %s",
@@ -165,6 +166,7 @@ class SaveProductToPostgresPipeline:
                         name,
                         brand_id,
                         incidecoder_url,
+                        img_url,
                         num_reviews,
                         rating
                     ) VALUES(
@@ -172,9 +174,10 @@ class SaveProductToPostgresPipeline:
                         %s,
                         %s,
                         %s,
+                        %s,
                         %s
                     ) RETURNING id""",
-                    (product_name, brand_id, incidecoder_url, 0, 0.0),
+                    (product_name, brand_id, incidecoder_url, item["img_url"], 0, 0.0),
                 )
                 product_id = self.cur.fetchone()[0]
 
