@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.serializers import serialize
+from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
@@ -144,9 +145,16 @@ class ProductViewSet(viewsets.ViewSet):
     def get_brand_products(self, request):
         slug = request.query_params.get("slug")
         brand = get_object_or_404(Brand, slug=slug)
-        queryset = Product.objects.filter(brand=brand)
-        serializer = ProductSerializer(queryset, many=True)
-        return Response(serializer.data)
+        queryset = Product.objects.filter(
+            Q(brand=brand) & ~Q(unique_identifier__icontains="discontinued")
+        )
+        # Serialize products
+        product_serializer = ProductSerializer(queryset, many=True)
+
+        # Create a dictionary with brand name and serialized product data
+        response_data = {"brand_name": brand.name, "products": product_serializer.data}
+
+        return JsonResponse(response_data)
 
     @action(detail=False, methods=["get"])
     def best_products(self, request):

@@ -3,9 +3,9 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 function BrandPage() {
+	const [brand, setBrand] = useState();
 	const [products, setProducts] = useState();
 	const { slug } = useParams();
-	console.log(slug);
 
 	useEffect(() => {
 		axios
@@ -16,17 +16,9 @@ function BrandPage() {
 			})
 			.then((response) => {
 				let data = response.data;
-				// let brandList = {};
-				// data.sort((a, b) => a.name.localeCompare(b.name));
-				// data.map((brand) => {
-				// 	let letter = brand['name'][0].toUpperCase();
-				// 	if (brandList[letter]) {
-				// 		brandList[letter].push(brand);
-				// 	} else {
-				// 		brandList[letter] = [brand];
-				// 	}
-				// });
-				setProducts(data);
+
+				setProducts(data['products']);
+				setBrand(data['brand_name']);
 			})
 			.catch((err) => {
 				console.error('Error retrieving products:', err);
@@ -35,7 +27,10 @@ function BrandPage() {
 
 	return (
 		<div className="w-[60rem] mx-auto flex mt-4 flex-col">
-			<div className="grid grid-cols-5 gap-4">
+			<h1 className="my-6 font-bold flex justify-center text-3xl">
+				{brand && brand}
+			</h1>
+			<div className="grid grid-cols-4 gap-4 mt-4">
 				{products &&
 					products.map((product, i) => (
 						<div className="relative group" key={i}>
@@ -46,7 +41,7 @@ function BrandPage() {
 									alt="product image"
 								/>
 							</a>
-							<div className="absolute bottom-0 flex flex-col bg-slate-200 w-full p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-100">
+							<div className="flex flex-col bg-slate-200 w-full p-2">
 								<h2 className="truncate">{product.name}</h2>
 							</div>
 							{/* Add more product details here */}
