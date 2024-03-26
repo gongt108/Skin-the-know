@@ -164,6 +164,15 @@ class ProductViewSet(viewsets.ViewSet):
         serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data)
 
+    @action(detail=False, methods=["get"])
+    def search_products(self, request):
+        search_term = request.query_params.get("search_term")
+        queryset = Product.objects.filter(
+            Q(brand__icontains=search_term) | Q(name__icontains=search_term)
+        )
+        serializer = ProductSerializer(queryset, many=True)
+        return Response(serializer.data)
+
     @action(detail=True, methods=["get"])
     def ingredients(self, request, pk=None):
         product = self.get_object()
