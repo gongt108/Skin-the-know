@@ -1,11 +1,15 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib.postgres.search import TrigramSimilarity
 from django.core.serializers import serialize
-from django.db.models import Q
+from django.db import models
+from django.db.models import Q, Value
+from django.db.models.functions import Cast, Length, Greatest
 from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
+from functools import reduce
 
 from rest_framework import viewsets
 from rest_framework.decorators import api_view, action
@@ -167,11 +171,17 @@ class ProductViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"])
     def search_products(self, request):
         search_term = request.query_params.get("search_term")
-        print(search_term)
-        queryset = Product.objects.filter(
-            Q(brand__name__icontains=search_term) | Q(name__icontains=search_term)
+        words = search_term.split()
+
+        # Start with an empty queryset
+        queryset = (
+            Product.objects.annotate(
+                similarity=TrigramSimilarity("unique_identifier", search_term),
+            )
+            .filter(similarity__gte=0.5)
+            .order_by("-similarity")
         )
-        print(queryset)
+
         serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data)
 
