@@ -11,6 +11,7 @@ import AddProduct from './AddProduct';
 import IngredientsList from './IngredientsList';
 import Brands from './Brands';
 import BrandPage from './BrandPage';
+import SearchResults from './SearchResults';
 import './input.css';
 
 //instantiating Cookies class by creating cookies object
@@ -29,6 +30,7 @@ const App = () => {
 					<Route path="/ingredients" element={<IngredientsList />} />
 					<Route path="/brands" element={<Brands />} />
 					<Route path="/brand/:slug" element={<BrandPage />} />
+					<Route path="/search" element={<SearchResults />} />
 				</Routes>
 			</Layout>
 		</Router>

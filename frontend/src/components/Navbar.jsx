@@ -1,11 +1,24 @@
 import React, { useState } from 'react';
 import { Dropdown } from 'flowbite-react';
+import { useNavigate } from 'react-router-dom';
 
 function Navbar() {
 	const [isSearching, setIsSearching] = useState(false);
+	const [searchTerm, setSeachTerm] = useState('');
+	const navigateTo = useNavigate();
 
 	const toggleSearch = () => {
 		setIsSearching(!isSearching);
+	};
+
+	const updateSearchTerm = (e) => {
+		e.preventDefault();
+		setSeachTerm(e.target.value);
+	};
+
+	const submitSearch = (e) => {
+		e.preventDefault();
+		navigateTo(`/search?term=${searchTerm}`);
 	};
 
 	return (
@@ -143,12 +156,15 @@ function Navbar() {
 					isSearching ? 'flex' : 'hidden'
 				} `}
 			>
-				<input
-					type="text"
-					id="search-navbar"
-					className="block w-full py-4 p-2 ps-10 text-sm text-gray-900 bg-gray-300/50  focus:outline-none"
-					placeholder="Search..."
-				/>
+				<form className=" w-full" onSubmit={(e) => submitSearch(e)}>
+					<input
+						type="text"
+						id="search-navbar"
+						className=" w-full block py-4 p-2 ps-10 text-sm text-gray-900 bg-gray-300/50  focus:outline-none"
+						placeholder="Search..."
+						onChange={(e) => updateSearchTerm(e)}
+					/>
+				</form>
 			</div>
 		</div>
 	);

@@ -167,9 +167,11 @@ class ProductViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"])
     def search_products(self, request):
         search_term = request.query_params.get("search_term")
+        print(search_term)
         queryset = Product.objects.filter(
-            Q(brand__icontains=search_term) | Q(name__icontains=search_term)
+            Q(brand__name__icontains=search_term) | Q(name__icontains=search_term)
         )
+        print(queryset)
         serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data)
 
