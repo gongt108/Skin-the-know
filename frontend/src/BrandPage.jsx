@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
+import ProductwithNameCard from './components/ProductwithNameCard';
+
 function BrandPage() {
 	const [brand, setBrand] = useState();
 	const [products, setProducts] = useState();
@@ -33,19 +35,7 @@ function BrandPage() {
 			<div className="grid grid-cols-4 gap-4 mt-4">
 				{products &&
 					products.map((product, i) => (
-						<div className="relative group" key={i}>
-							<a href={`/product/${product.unique_identifier}`}>
-								<img
-									src={product.img_url}
-									className="w-60 h-60 rounded-lg object-contain"
-									alt="product image"
-								/>
-							</a>
-							<div className="flex flex-col bg-slate-200 w-full p-2">
-								<h2 className="truncate">{product.name}</h2>
-							</div>
-							{/* Add more product details here */}
-						</div>
+						<ProductwithNameCard key={i} product={product} />
 					))}
 			</div>
 		</div>
