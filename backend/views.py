@@ -139,20 +139,6 @@ def get_product_data(request, unique_identifier):
         return JsonResponse({"error": "Product not found"}, status=404)
 
 
-# def get_all_ingredients(request):
-#     all_ingredients = Ingredient.objects.all()
-#     json_data = serialize("json", all_ingredients)
-#     data = json.loads(json_data)
-
-#     ingredients_data = []
-#     for item in data:
-#         fields = item["fields"]
-#         fields["pk"] = item["pk"]  # Add 'pk' to the fields dictionary
-#         ingredients_data.append(fields)
-
-#     return JsonResponse(ingredients_data, safe=False)
-
-
 class ProductViewSet(viewsets.ViewSet):
     def list(self, request):
         queryset = Product.objects.all()
@@ -163,6 +149,14 @@ class ProductViewSet(viewsets.ViewSet):
         queryset = Product.objects.all()
         product = get_object_or_404(queryset, pk=pk)
         serializer = ProductSerializer(product)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=["get"])
+    def best_products(self, request):
+        queryset = Product.objects.order_by("-rating")[
+            :8
+        ]  # Retrieving the best 8 products
+        serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data)
 
     @action(detail=True, methods=["get"])
