@@ -11,8 +11,8 @@ from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 import json
 
-from .models import Product, Ingredient
-from .serializers import ProductSerializer, IngredientSerializer
+from .models import Product, Ingredient, Brand
+from .serializers import ProductSerializer, IngredientSerializer, BrandSerializer
 
 
 @api_view(["GET"])
@@ -68,17 +68,6 @@ def whoami_view(request):
     if not request.user.is_authenticated:
         return JsonResponse({"isauthenticated": False})
     return JsonResponse({"username": request.user.username})
-
-
-# def get_all_products(request):
-#     all_products = Product.objects.all()
-#     json_data = serialize("json", all_products)
-#     data = json.loads(json_data)
-
-#     # Extract the 'fields' attribute from each dictionary
-#     fields_data = [item["fields"] for item in data]
-
-#     return JsonResponse(fields_data, safe=False)
 
 
 def get_product_data(request, unique_identifier):
@@ -177,4 +166,17 @@ class IngredientViewSet(viewsets.ViewSet):
         queryset = Ingredient.objects.all()
         ingredient = get_object_or_404(queryset, pk=pk)
         serializer = IngredientSerializer(ingredient)
+        return Response(serializer.data)
+
+
+class BrandViewSet(viewsets.ViewSet):
+    def list(self, request):
+        queryset = Brand.objects.all()
+        serializer = BrandSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = Brand.objects.all()
+        brand = get_object_or_404(queryset, pk=pk)
+        serializer = BrandSerializer(brand)
         return Response(serializer.data)
