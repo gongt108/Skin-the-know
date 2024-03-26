@@ -12,7 +12,7 @@ class Ingredient(models.Model):
     )
     avoid_list = models.ManyToManyField("self", symmetrical=True, blank=True)
     caution_list = models.ManyToManyField("self", symmetrical=True, blank=True)
-    incidecoder_url = models.URLField(null=True, blank=True)
+    incidecoder_url = models.URLField(unique=True, default="/")
     img_url = models.URLField(null=True, blank=True)
     skin_concern = models.ManyToManyField("SkinConcern", blank=True)
 

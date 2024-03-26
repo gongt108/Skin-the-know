@@ -4,15 +4,13 @@ import { useParams } from 'react-router-dom';
 
 function ProductPage() {
 	const [productInfo, setProductInfo] = useState();
+	const [isCollapsed, setIsCollapsed] = useState(true);
 	const { slug } = useParams();
-	console.log(slug);
 
 	useEffect(() => {
-		console.log('use effect');
 		axios
 			.get(`http://localhost:8000/api/product/${slug}`)
 			.then((response) => {
-				console.log('line 13', response.data);
 				setProductInfo(response.data);
 			})
 			.catch((err) => {
@@ -20,7 +18,10 @@ function ProductPage() {
 			});
 	}, [slug]);
 
-	console.log(productInfo);
+	const toggleCollapse = () => {
+		setIsCollapsed(!isCollapsed);
+	};
+
 	return (
 		<div className="w-[60rem] mx-auto flex">
 			{productInfo && (
@@ -32,9 +33,9 @@ function ProductPage() {
 							className="w-68 p-4 mx-auto"
 						/>
 					</div>
-					<div className="w-1/2 h-full ">
+					<div className="w-1/2 h-full">
 						<div className="border-b">
-							<h2 className="font-semibold text-2xl mt-24">
+							<h2 className="font-semibold text-2xl mt-16">
 								{productInfo.name}
 							</h2>
 							<a href="/" className="text-lg underline text-teal-500">
@@ -49,51 +50,84 @@ function ProductPage() {
 							)}
 						</div>
 						<div>
+							{productInfo.ingredients.some(
+								(ingredient) => ingredient.avoid_list.length > 0
+							) && (
+								<div>
+									<h4 className="font-semibold text-xl mt-8">
+										Ingredients to avoid
+									</h4>
+									<ul className="list-none">
+										{[
+											...new Set(
+												productInfo.ingredients.flatMap((ingredient) =>
+													ingredient.avoid_list.map((item) => item.name)
+												)
+											),
+										].join(', ')}
+									</ul>
+									{isCollapsed && (
+										<div
+											className="mt-2 text-blue-500 cursor-pointer hover:underline"
+											onClick={toggleCollapse}
+										>
+											Show Breakdown
+										</div>
+									)}
+
+									{!isCollapsed && (
+										<div>
+											<div className="flex justify-between mt-4">
+												<h4 className="font-semibold text-lg">Breakdown</h4>
+												<div
+													className="text-blue-500 cursor-pointer hover:underline"
+													onClick={toggleCollapse}
+												>
+													Hide Breakdown
+												</div>
+											</div>
+											<table className="table-auto w-full">
+												<thead>
+													<tr>
+														<th className="w-2/5 px-4 py-2 border">
+															Ingredient{' '}
+														</th>
+														<th className="px-4 py-2 border w-3/5">Avoid </th>
+													</tr>
+												</thead>
+												<tbody>
+													{productInfo.ingredients.map(
+														(ingredient, index) =>
+															ingredient.avoid_list.length > 0 && (
+																<tr key={index}>
+																	<td className="border px-4 py-2">
+																		<a href={ingredient.incidecoder_url}>
+																			{ingredient.name}
+																		</a>
+																	</td>
+																	<td className="border px-4 py-2">
+																		{ingredient.avoid_list
+																			.map(
+																				(avoidItem, avoidIndex) =>
+																					avoidItem.name
+																			)
+																			.join(', ')}
+																	</td>
+																</tr>
+															)
+													)}
+												</tbody>
+											</table>
+										</div>
+									)}
+								</div>
+							)}
 							<h3 className="font-semibold text-xl mt-8">Ingredients</h3>
-							<ul className="list-none">
+							<ul className="list-none mb-8">
 								{productInfo.ingredients
 									.map((ingredient, index) => ingredient.name)
 									.join(', ')}
 							</ul>
-
-							<h4 className="font-semibold text-lg mt-8">
-								Ingredients to avoid
-							</h4>
-							<ul className="list-none">
-								{[
-									...new Set(
-										productInfo.ingredients.flatMap((ingredient) =>
-											ingredient.avoid_list.map((item) => item.name)
-										)
-									),
-								].join(', ')}
-							</ul>
-
-							<h4 className="font-semibold text-lg mt-8">Breakdown</h4>
-							<table className="table-auto w-full">
-								<thead>
-									<tr>
-										<th className="w-2/5 px-4 py-2 border">Ingredient </th>
-										<th className="px-4 py-2 border w-3/5">Avoid </th>
-									</tr>
-								</thead>
-								<tbody>
-									{productInfo.ingredients.map((ingredient, index) => (
-										<tr key={index}>
-											<td className="border px-4 py-2">
-												<a href={ingredient.incidecoder_url}>
-													{ingredient.name}
-												</a>
-											</td>
-											<td className="border px-4 py-2">
-												{ingredient.avoid_list
-													.map((avoidItem, avoidIndex) => avoidItem.name)
-													.join(', ')}
-											</td>
-										</tr>
-									))}
-								</tbody>
-							</table>
 						</div>
 					</div>
 				</div>

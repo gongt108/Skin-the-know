@@ -17,7 +17,7 @@ class QuotesSpider(scrapy.Spider):
     }
 
     def start_requests(self):
-        urls = ["https://incidecoder.com/brands/krave"]
+        urls = ["https://incidecoder.com/brands/some-by-mi"]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
 
