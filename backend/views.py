@@ -141,6 +141,14 @@ class ProductViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
     @action(detail=False, methods=["get"])
+    def get_brand_products(self, request):
+        slug = request.query_params.get("slug")
+        brand = get_object_or_404(Brand, slug=slug)
+        queryset = Product.objects.filter(brand=brand)
+        serializer = ProductSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=["get"])
     def best_products(self, request):
         queryset = Product.objects.order_by("-rating")[
             :8

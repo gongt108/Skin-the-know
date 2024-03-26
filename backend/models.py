@@ -20,6 +20,17 @@ class Ingredient(models.Model):
 class Brand(models.Model):
     name = models.CharField(max_length=100)
     img_url = models.CharField(max_length=255, null=True, blank=True)
+    slug = models.CharField(max_length=255, blank=True, editable=True)
+
+    def save(self, *args, **kwargs):
+        # Generate unique identifier using brand name and product name
+        if not self.slug:
+            self.slug = self.generate_slug()
+        super().save(*args, **kwargs)
+
+    def generate_slug(self):
+        brand_slug = slugify(self.name)
+        return brand_slug.lower()
 
 
 class Product(models.Model):

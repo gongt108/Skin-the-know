@@ -2,11 +2,18 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
-function Brands() {
-	const [brands, setBrands] = useState();
+function BrandPage() {
+	const [brands, setProducts] = useState();
+	const { slug } = useParams();
+	console.log(slug);
+
 	useEffect(() => {
 		axios
-			.get('http://localhost:8000/api/brands/')
+			.get('http://localhost:8000/api/products/get_brand_products/', {
+				params: {
+					slug: slug,
+				},
+			})
 			.then((response) => {
 				let data = response.data;
 				let brandList = {};
@@ -19,7 +26,7 @@ function Brands() {
 						brandList[letter] = [brand];
 					}
 				});
-				setBrands(brandList);
+				setProducts(brandList);
 			})
 			.catch((err) => {
 				console.error('Error retrieving brands:', err);
@@ -76,4 +83,4 @@ function Brands() {
 	);
 }
 
-export default Brands;
+export default BrandPage;
