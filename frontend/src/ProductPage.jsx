@@ -57,11 +57,15 @@ function ProductPage() {
 									<h4 className="font-semibold text-xl mt-8">
 										Ingredients to avoid
 									</h4>
-									<ul className="list-none">
+									<ul className="list-none pe-4">
 										{[
 											...new Set(
 												productInfo.ingredients.flatMap((ingredient) =>
-													ingredient.avoid_list.map((item) => item.name)
+													ingredient.avoid_list.map((item) =>
+														item.alias
+															? `${item.name} (${item.alias})`
+															: item.name
+													)
 												)
 											),
 										].join(', ')}

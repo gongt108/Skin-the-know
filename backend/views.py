@@ -16,8 +16,13 @@ from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 import json
 
-from .models import Product, Ingredient, Brand
-from .serializers import ProductSerializer, IngredientSerializer, BrandSerializer
+from .models import Product, Ingredient, Brand, SkinConcern
+from .serializers import (
+    ProductSerializer,
+    IngredientSerializer,
+    BrandSerializer,
+    SkinConcernSerializer,
+)
 
 
 @api_view(["GET"])
@@ -126,7 +131,6 @@ def get_product_data(request, unique_identifier):
                 }
             )
 
-        print(product_data)
         return JsonResponse(product_data, safe=False)
     else:
         # Return a JsonResponse indicating that the product does not exist
@@ -178,7 +182,7 @@ class ProductViewSet(viewsets.ViewSet):
             Product.objects.annotate(
                 similarity=TrigramSimilarity("unique_identifier", search_term),
             )
-            .filter(similarity__gte=0.5)
+            .filter(similarity__gte=0.3)
             .order_by("-similarity")
         )
 
@@ -216,4 +220,17 @@ class BrandViewSet(viewsets.ViewSet):
         queryset = Brand.objects.all()
         brand = get_object_or_404(queryset, pk=pk)
         serializer = BrandSerializer(brand)
+        return Response(serializer.data)
+
+
+class SkinConcernViewSet(viewsets.ViewSet):
+    def list(self, request):
+        queryset = SkinConcern.objects.all()
+        serializer = SkinConcernSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = SkinConcern.objects.all()
+        skin_concern = get_object_or_404(queryset, pk=pk)
+        serializer = SkinConcernSerializer(skin_concern)
         return Response(serializer.data)
