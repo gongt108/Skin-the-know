@@ -55,7 +55,7 @@ function ProductPage() {
 							) && (
 								<div>
 									<h4 className="font-semibold text-xl mt-8">
-										Ingredients to avoid
+										May cause irritation if used with products that contain:
 									</h4>
 									<ul className="list-none pe-4">
 										{[
@@ -96,7 +96,9 @@ function ProductPage() {
 														<th className="w-2/5 px-4 py-2 border">
 															Ingredient{' '}
 														</th>
-														<th className="px-4 py-2 border w-3/5">Avoid </th>
+														<th className="px-4 py-2 border w-3/5">
+															Caution List
+														</th>
 													</tr>
 												</thead>
 												<tbody>

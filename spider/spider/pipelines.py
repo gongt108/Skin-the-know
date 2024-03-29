@@ -1,5 +1,6 @@
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
+from django.utils.text import slugify
 
 
 class ProductItemPipeline:
@@ -14,12 +15,6 @@ class ProductItemPipeline:
                 adapter["unique_identifier"] = adapter.get("unique_identifier").replace(
                     "/products/", ""
                 )
-
-        # adapter["name"] = item["name"]
-        # adapter["brand"] = item["brand"]
-        # adapter["ingredients"] = item["ingredients"]
-        # url = item["incidecoder_url"]
-        # adapter["incidecoder_url"] = f"https://incidecoder.com{url}"
         return item
 
 
@@ -77,7 +72,9 @@ class SaveProductToPostgresPipeline:
         CREATE TABLE IF NOT EXISTS backend_brand(
             id serial PRIMARY KEY,
             name text,
+            slug VARCHAR(255),
             img_url VARCHAR(255)
+            
         )
         """
         )
@@ -149,6 +146,7 @@ class SaveProductToPostgresPipeline:
                 )
                 # Retrieve the ID of the newly inserted record
                 brand_id = self.cur.fetchone()[0]
+                brand_id.save()
 
                 # Commit the transaction
                 self.connection.commit()

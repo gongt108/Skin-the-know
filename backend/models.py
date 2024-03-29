@@ -20,7 +20,7 @@ class Ingredient(models.Model):
 class Brand(models.Model):
     name = models.CharField(max_length=100)
     img_url = models.CharField(max_length=255, null=True, blank=True)
-    slug = models.CharField(max_length=255, blank=True, editable=True)
+    slug = models.CharField(max_length=255, blank=True, editable=True, null=True)
 
     def save(self, *args, **kwargs):
         # Generate unique identifier using brand name and product name
@@ -35,13 +35,11 @@ class Brand(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
-    brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, null=True)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     ingredients = models.ManyToManyField(Ingredient, blank=True)
-    main_active = models.ForeignKey(
+    main_active = models.ManyToManyField(
         Ingredient,
         related_name="main_active",
-        on_delete=models.SET_NULL,
-        null=True,
         blank=True,
     )
     skin_concern = models.ManyToManyField("SkinConcern", blank=True)
@@ -70,3 +68,24 @@ class Product(models.Model):
 
 class SkinConcern(models.Model):
     name = models.CharField(max_length=100)
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # image = models.ImageField(default="default.jpg", upload_to="profile_pic")
+    img_url = models.CharField(
+        default="https://png.pngtree.com/background/20230519/original/pngtree-girl-reading-books-in-a-picture-picture-image_2658551.jpg"
+    )
+    email = models.EmailField(default="")
+    first_name = models.CharField(max_length=100, default="John")
+    last_name = models.CharField(max_length=100, default="Doe")
+    own_list = models.ManyToManyField(Product, blank=True, related_name="own_list")
+    wishlist = models.ManyToManyField(Product, blank=True, related_name="wishlist")
+
+
+class Schedule(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    product = models.ManyToManyField(
+        Product, blank=True, related_name="schedule_product"
+    )
+    time = models.DateTimeField()

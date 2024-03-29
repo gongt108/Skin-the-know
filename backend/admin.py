@@ -4,8 +4,8 @@ from .models import Ingredient, Brand, Product, SkinConcern
 
 # Register your models here.
 class IngredientAdmin(admin.ModelAdmin):
-    list_display = ("id", "name")
-    search_fields = ("name",)
+    list_display = ("id", "name", "alias")
+    search_fields = ("name", "id", "alias")
 
 
 admin.site.register(Ingredient, IngredientAdmin)
@@ -21,6 +21,7 @@ admin.site.register(Brand, BrandAdmin)
 class ProductAdmin(admin.ModelAdmin):
 
     list_display = ("id", "name", "unique_identifier")
+    search_fields = ("id", "name", "unique_identifier")
 
 
 admin.site.register(Product, ProductAdmin)

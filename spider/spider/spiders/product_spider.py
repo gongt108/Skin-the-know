@@ -2,6 +2,7 @@ from pathlib import Path
 
 import scrapy
 from spider.items import IngredientListItem, ProductItem
+from django.utils.text import slugify
 
 
 class QuotesSpider(scrapy.Spider):
@@ -17,7 +18,7 @@ class QuotesSpider(scrapy.Spider):
     }
 
     def start_requests(self):
-        urls = ["https://incidecoder.com/brands/purito"]
+        urls = ["https://incidecoder.com/brands/cos-de-baha"]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
 
