@@ -66,6 +66,7 @@ class Product(models.Model):
 
 class SkinConcern(models.Model):
     name = models.CharField(max_length=100)
+    slugified_name = models.CharField(max_length=100, blank=True)
     ingredients = models.ManyToManyField(Ingredient, blank=True)
 
 

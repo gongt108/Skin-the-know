@@ -234,11 +234,21 @@ class SkinConcernViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"])
     def get_products(self, request, pk=None):
         query = request.query_params.get("query")
-        skin_concern = SkinConcern.objects.filter(name=query).first()
+        filter = request.query_params.get("filter")
+
+        skin_concern = SkinConcern.objects.filter(slugified_name=query).first()
         ingredients = skin_concern.ingredients.all()
+        ingredient_serializer = IngredientSerializer(ingredients, many=True)
+
         q_objects = Q()
         for ingredient in ingredients:
             q_objects |= Q(main_active__in=[ingredient])
         queryset = Product.objects.filter(q_objects).distinct()
-        serializer = ProductSerializer(queryset, many=True)
-        return Response(serializer.data)
+        product_serializer = ProductSerializer(queryset, many=True)
+        response_data = {
+            "skin_concern": skin_concern.name,
+            "ingriedients": ingredient_serializer.data,
+            "products": product_serializer.data,
+        }
+
+        return JsonResponse(response_data)

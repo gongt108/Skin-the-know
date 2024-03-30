@@ -8,12 +8,14 @@ function CategoryPage() {
 	const [searchParams] = useSearchParams();
 	const query = searchParams.get('query');
 	const [products, setProducts] = useState();
+	const [filter, setFilter] = useState('all');
 
 	useEffect(() => {
 		axios
 			.get('http://localhost:8000/api/skinconcern/get_products/', {
 				params: {
 					query: query,
+					filter: filter,
 				},
 			})
 			.then((response) => {
@@ -29,7 +31,8 @@ function CategoryPage() {
 	return (
 		<div className="w-[60rem] mx-auto flex mt-4 flex-col">
 			<div className="ms-4 mt-4">
-				Results for <span className="font-bold text-2xl">'{query}'</span>
+				Top ingredients for combating{' '}
+				<span className="font-bold text-2xl">{query}</span>
 			</div>
 			<div className="grid grid-cols-5 gap-4 mt-4">
 				{products &&
