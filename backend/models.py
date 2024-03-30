@@ -14,7 +14,6 @@ class Ingredient(models.Model):
     caution_list = models.ManyToManyField("self", symmetrical=True, blank=True)
     incidecoder_url = models.URLField(unique=True, default="/")
     img_url = models.URLField(null=True, blank=True)
-    skin_concern = models.ManyToManyField("SkinConcern", blank=True)
 
 
 class Brand(models.Model):
@@ -42,7 +41,6 @@ class Product(models.Model):
         related_name="main_active",
         blank=True,
     )
-    skin_concern = models.ManyToManyField("SkinConcern", blank=True)
     img_url = models.CharField(max_length=255, null=True)
     incidecoder_url = models.URLField(null=True)
     product_link = models.URLField(null=True, blank=True)
@@ -68,6 +66,7 @@ class Product(models.Model):
 
 class SkinConcern(models.Model):
     name = models.CharField(max_length=100)
+    ingredients = models.ManyToManyField(Ingredient, blank=True)
 
 
 class Profile(models.Model):
@@ -76,9 +75,6 @@ class Profile(models.Model):
     img_url = models.CharField(
         default="https://png.pngtree.com/background/20230519/original/pngtree-girl-reading-books-in-a-picture-picture-image_2658551.jpg"
     )
-    email = models.EmailField(default="")
-    first_name = models.CharField(max_length=100, default="John")
-    last_name = models.CharField(max_length=100, default="Doe")
     own_list = models.ManyToManyField(Product, blank=True, related_name="own_list")
     wishlist = models.ManyToManyField(Product, blank=True, related_name="wishlist")
 

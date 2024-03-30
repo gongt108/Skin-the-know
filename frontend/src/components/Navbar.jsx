@@ -1,8 +1,17 @@
 import React, { useState } from 'react';
-import { Dropdown } from 'flowbite-react';
+import { Dropdown, DropdownItem } from 'flowbite-react';
 import { useNavigate } from 'react-router-dom';
 
+const customTheme = {
+	button: {
+		color: {
+			primary: 'bg-red-500 hover:bg-red-600',
+		},
+	},
+};
+
 function Navbar() {
+	const isLoggedIn = true;
 	const [isSearching, setIsSearching] = useState(false);
 	const [searchTerm, setSeachTerm] = useState('');
 	const navigateTo = useNavigate();
@@ -111,14 +120,7 @@ function Navbar() {
 									Products
 								</a>
 							</li>
-							<li>
-								<a
-									href="/ingredients"
-									className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-								>
-									Ingredients
-								</a>
-							</li>
+
 							<li>
 								<a
 									href="/brands"
@@ -131,6 +133,7 @@ function Navbar() {
 							<li>
 								<Dropdown
 									inline
+									theme={{ theme: customTheme }}
 									className="text-white white z-20"
 									dismissOnClick={false}
 									renderTrigger={() => (
@@ -139,14 +142,114 @@ function Navbar() {
 										</span>
 									)}
 								>
-									<Dropdown.Item>Acne</Dropdown.Item>
-									<Dropdown.Item>Hyperpigmentation</Dropdown.Item>
-									<Dropdown.Item>Hydration</Dropdown.Item>
-									<Dropdown.Item>Oil Control</Dropdown.Item>
-									<Dropdown.Item>Pores</Dropdown.Item>
-									<Dropdown.Item>Anti-aging</Dropdown.Item>
+									<DropdownItem
+										as="a"
+										href="/"
+										style={{ color: 'inherit', textDecoration: 'none' }}
+										onMouseEnter={(e) => (e.target.style.color = '#112554')}
+										onMouseLeave={(e) => (e.target.style.color = 'inherit')}
+									>
+										Acne
+									</DropdownItem>
+									<DropdownItem
+										as="a"
+										href="/category?query=hyperpigmentation"
+										style={{ color: 'inherit', textDecoration: 'none' }}
+										onMouseEnter={(e) => (e.target.style.color = '#112554')}
+										onMouseLeave={(e) => (e.target.style.color = 'inherit')}
+									>
+										Hyperpigmentation
+									</DropdownItem>
+									<DropdownItem
+										as="a"
+										href="/"
+										style={{ color: 'inherit', textDecoration: 'none' }}
+										onMouseEnter={(e) => (e.target.style.color = '#112554')}
+										onMouseLeave={(e) => (e.target.style.color = 'inherit')}
+									>
+										Hydration
+									</DropdownItem>
+									<DropdownItem
+										as="a"
+										href="/"
+										style={{ color: 'inherit', textDecoration: 'none' }}
+										onMouseEnter={(e) => (e.target.style.color = '#112554')}
+										onMouseLeave={(e) => (e.target.style.color = 'inherit')}
+									>
+										Oil Control
+									</DropdownItem>
+									<DropdownItem
+										as="a"
+										href="/"
+										style={{ color: 'inherit', textDecoration: 'none' }}
+										onMouseEnter={(e) => (e.target.style.color = '#112554')}
+										onMouseLeave={(e) => (e.target.style.color = 'inherit')}
+									>
+										Pores
+									</DropdownItem>
+									<DropdownItem
+										as="a"
+										href="/"
+										style={{ color: 'inherit', textDecoration: 'none' }}
+										onMouseEnter={(e) => (e.target.style.color = '#112554')}
+										onMouseLeave={(e) => (e.target.style.color = 'inherit')}
+									>
+										Anti-aging
+									</DropdownItem>
 								</Dropdown>
 							</li>
+							{!isLoggedIn && (
+								<li>
+									<a
+										href="/ingredients"
+										className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+									>
+										Login
+									</a>
+								</li>
+							)}
+							{isLoggedIn && (
+								<li className="hover:text-blue-500">
+									<Dropdown
+										inline
+										className="text-white white z-20"
+										dismissOnClick={false}
+										renderTrigger={() => (
+											<span className="text-white cursor-pointer hover:text-blue-500">
+												Profile
+											</span>
+										)}
+									>
+										<DropdownItem
+											as="a"
+											href="/"
+											style={{ color: 'inherit', textDecoration: 'none' }}
+											onMouseEnter={(e) => (e.target.style.color = '#112554')}
+											onMouseLeave={(e) => (e.target.style.color = 'inherit')}
+										>
+											Go to Profile
+										</DropdownItem>
+										<DropdownItem
+											as="a"
+											href="/"
+											style={{ color: 'inherit', textDecoration: 'none' }}
+											onMouseEnter={(e) => (e.target.style.color = '#112554')}
+											onMouseLeave={(e) => (e.target.style.color = 'inherit')}
+										>
+											Routine
+										</DropdownItem>
+										<DropdownItem
+											as="a"
+											href="/"
+											style={{ color: 'inherit', textDecoration: 'none' }}
+											onMouseEnter={(e) => (e.target.style.color = '#112554')}
+											onMouseLeave={(e) => (e.target.style.color = 'inherit')}
+										>
+											Logout
+										</DropdownItem>
+									</Dropdown>
+								</li>
+							)}
 						</ul>
 					</div>
 				</div>

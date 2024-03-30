@@ -93,9 +93,6 @@ def get_product_data(request, unique_identifier):
             "main_active": (
                 product_info.main_active.name if product_info.main_active else None
             ),
-            "skin_concern": [
-                concern.name for concern in product_info.skin_concern.all()
-            ],
             "img_url": product_info.img_url,
             "incidecoder_url": product_info.incidecoder_url,
             "product_link": product_info.product_link,
@@ -175,7 +172,6 @@ class ProductViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"])
     def search_products(self, request):
         search_term = request.query_params.get("search_term")
-        words = search_term.split()
 
         # Start with an empty queryset
         queryset = (
@@ -233,4 +229,16 @@ class SkinConcernViewSet(viewsets.ViewSet):
         queryset = SkinConcern.objects.all()
         skin_concern = get_object_or_404(queryset, pk=pk)
         serializer = SkinConcernSerializer(skin_concern)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=["get"])
+    def get_products(self, request, pk=None):
+        query = request.query_params.get("query")
+        skin_concern = SkinConcern.objects.filter(name=query).first()
+        ingredients = skin_concern.ingredients.all()
+        q_objects = Q()
+        for ingredient in ingredients:
+            q_objects |= Q(main_active__in=[ingredient])
+        queryset = Product.objects.filter(q_objects).distinct()
+        serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data)
