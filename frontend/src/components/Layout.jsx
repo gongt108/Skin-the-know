@@ -4,9 +4,9 @@ import Navbar from './Navbar';
 
 const Layout = ({ children }) => {
 	return (
-		<div>
+		<div className="h-screen flex flex-col">
 			<Navbar />
-			<main>
+			<main className="flex flex-1">
 				{/* Main content (usually page-specific content) */}
 				{children}
 			</main>

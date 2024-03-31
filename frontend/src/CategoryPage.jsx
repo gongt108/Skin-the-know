@@ -37,7 +37,6 @@ function CategoryPage() {
 
 	const filterSelection = (ingredient) => {
 		setFilter(ingredient.id);
-		navigate(`/category?query=${skinConcern['slugified_name']}`);
 	};
 
 	return (
@@ -49,11 +48,20 @@ function CategoryPage() {
 				)}
 			</div>
 			<div className="grid grid-cols-5 gap-4 mt-4">
-				<div className="flex flex-col col-span-1 bg-slate-100">
+				<div className="flex flex-col col-span-1 bg-slate-100 h-full">
 					<h3 className="mt-4 mb-2 ps-4 pb-2 font-semibold border-b">
 						Filter by active:
 					</h3>
-					<div className="flex flex-col ms-4 w-fit">
+
+					<div className="flex flex-col ms-4 w-fit h-full">
+						<div
+							className={`flex mb-1 cursor-pointer ${
+								filter === 'all' ? 'font-bold' : ''
+							}`}
+							onClick={() => setFilter('all')}
+						>
+							View all
+						</div>
 						{ingredients &&
 							ingredients.map((ingredient, i) => (
 								<div

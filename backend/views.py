@@ -244,7 +244,6 @@ class SkinConcernViewSet(viewsets.ViewSet):
         q_objects = Q()
 
         if filter == "all":
-            print("yes")
             for ingredient in ingredients:
                 q_objects |= Q(main_active__in=[ingredient])
             queryset = Product.objects.filter(q_objects).distinct()

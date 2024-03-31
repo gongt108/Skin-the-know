@@ -222,7 +222,7 @@ function Navbar() {
 									>
 										<DropdownItem
 											as="a"
-											href="/"
+											href="/profile"
 											style={{ color: 'inherit', textDecoration: 'none' }}
 											onMouseEnter={(e) => (e.target.style.color = '#112554')}
 											onMouseLeave={(e) => (e.target.style.color = 'inherit')}
