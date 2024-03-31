@@ -237,17 +237,27 @@ class SkinConcernViewSet(viewsets.ViewSet):
         filter = request.query_params.get("filter")
 
         skin_concern = SkinConcern.objects.filter(slugified_name=query).first()
+        skin_concern_serializer = SkinConcernSerializer(skin_concern, many=False)
         ingredients = skin_concern.ingredients.all()
         ingredient_serializer = IngredientSerializer(ingredients, many=True)
 
         q_objects = Q()
-        for ingredient in ingredients:
-            q_objects |= Q(main_active__in=[ingredient])
-        queryset = Product.objects.filter(q_objects).distinct()
+
+        if filter == "all":
+            print("yes")
+            for ingredient in ingredients:
+                q_objects |= Q(main_active__in=[ingredient])
+            queryset = Product.objects.filter(q_objects).distinct()
+        else:
+            ingredient = Ingredient.objects.get(id=filter)
+            q_objects = Q(main_active__in=[ingredient.id])
+            queryset = Product.objects.filter(
+                main_active__in=[ingredient.id]
+            ).distinct()
         product_serializer = ProductSerializer(queryset, many=True)
         response_data = {
-            "skin_concern": skin_concern.name,
-            "ingriedients": ingredient_serializer.data,
+            "skin_concern": skin_concern_serializer.data,
+            "ingredients": ingredient_serializer.data,
             "products": product_serializer.data,
         }
 
