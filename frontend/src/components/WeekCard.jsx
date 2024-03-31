@@ -3,7 +3,7 @@ import React from 'react';
 function WeekCard() {
 	return (
 		<div className="mx-auto flex h-full flex-1 w-[60rem]">
-			<table className="mx-auto table-fixed mt-8 mb-8 w-[60rem]">
+			<table className="mx-auto table-fixed mt-4 mb-8 w-[60rem]">
 				<thead className="h-12">
 					<tr>
 						<th className="border px-4 py-2 w-20"></th>

@@ -80,9 +80,30 @@ class Profile(models.Model):
     wishlist = models.ManyToManyField(Product, blank=True, related_name="wishlist")
 
 
+class Week(models.Model):
+    name = models.CharField(max_length=255, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
 class Schedule(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    WEEKDAYS = [
+        ("Sunday", "Sunday"),
+        ("Monday", "Monday"),
+        ("Tuesday", "Tuesday"),
+        ("Wednesday", "Wednesday"),
+        ("Thursday", "Thursday"),
+        ("Friday", "Friday"),
+        ("Saturday", "Saturday"),
+    ]
+
+    WEEK_TIMES = [
+        ("AM", "AM"),
+        ("PM", "PM"),
+    ]
+
+    week = models.ForeignKey(Week, on_delete=models.CASCADE, null=True)
     product = models.ManyToManyField(
         Product, blank=True, related_name="schedule_product"
     )
-    time = models.DateTimeField()
+    day = models.CharField(max_length=10, choices=WEEKDAYS, default="Sunday")
+    time = models.CharField(max_length=2, choices=WEEK_TIMES, default="AM")
