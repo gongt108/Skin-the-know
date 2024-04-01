@@ -29,6 +29,7 @@ import axios from 'axios';
 
 function Profile() {
 	const [weeks, setWeeks] = useState();
+	const [schedule, setSchedule] = useState();
 
 	useEffect(() => {
 		axios
@@ -36,7 +37,8 @@ function Profile() {
 			.then((response) => {
 				const data = response.data;
 				console.log(data);
-				setWeeks(data);
+				setWeeks(data['weeks']);
+				setSchedule(data['schedules']);
 			})
 			.catch((err) => {
 				console.error('Error retrieving schedule:', err);
@@ -54,7 +56,7 @@ function Profile() {
 					))}
 				<div className="button cursor-pointer">+</div>
 			</div>
-			<WeekCard />
+			<WeekCard schedule={schedule} />
 		</div>
 	);
 }

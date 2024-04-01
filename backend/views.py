@@ -282,6 +282,15 @@ class WeekViewSet(viewsets.ViewSet):
         # weeks = request.user.week_set
         # print(weeks.all())
 
-        queryset = Week.objects.all()
-        serializer = WeekSerializer(queryset, many=True)
-        return Response(serializer.data)
+        weeks = Week.objects.all()
+        week_serializer = WeekSerializer(weeks, many=True)
+        week = weeks[0]
+        schedule = week.schedule_set.all()
+        print(schedule)
+        schedule_serializer = ScheduleSerializer(schedule, many=True)
+
+        response_data = {
+            "weeks": week_serializer.data,
+            "schedules": schedule_serializer.data,
+        }
+        return Response(response_data)
