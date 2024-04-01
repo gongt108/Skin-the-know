@@ -56,7 +56,7 @@ function Profile() {
 					))}
 				<div className="button cursor-pointer">+</div>
 			</div>
-			<WeekCard schedule={schedule} />
+			{schedule && <WeekCard schedule={schedule} />}
 		</div>
 	);
 }

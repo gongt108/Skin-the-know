@@ -1,8 +1,9 @@
 import React from 'react';
 
-function WeekCard() {
+function WeekCard({ schedule }) {
+	console.log(schedule);
 	return (
-		<div className="mx-auto flex h-full flex-1 w-[60rem]">
+		<div className="mx-auto flex w-[60rem]">
 			<table className="mx-auto table-fixed mt-4 mb-8 w-[60rem]">
 				<thead className="h-12">
 					<tr>
@@ -17,25 +18,55 @@ function WeekCard() {
 					</tr>
 				</thead>
 				<tbody className="">
+					{/* Render rows for AM */}
 					<tr className="">
-						<td className="w-20 border px-4 py-2 font-bold">AM</td>
-						<td className="border px-4 py-2">Data 1</td>
-						<td className="border px-4 py-2">Data 2</td>
-						<td className="border px-4 py-2">Data 3</td>
-						<td className="border px-4 py-2">Data 4</td>
-						<td className="border px-4 py-2">Data 5</td>
-						<td className="border px-4 py-2">Data 6</td>
-						<td className="border px-4 py-2">Data 7</td>
+						<td className="border px-4 py-2 font-bold">AM</td>
+
+						{[
+							'Sunday',
+							'Monday',
+							'Tuesday',
+							'Wednesday',
+							'Thursday',
+							'Friday',
+							'Saturday',
+						].map((day) => (
+							<td key={day} className="border px-4 py-2">
+								{/* Render product data based on day */}
+								{schedule
+									.filter((item) => item.time === 'AM')
+									.map((item, index) => (
+										<div key={index}>
+											{item.day === day ? item.product.join(', ') : ''}
+										</div>
+									))}
+							</td>
+						))}
 					</tr>
-					<tr>
+					{/* Render rows for PM */}
+					<tr className="">
 						<td className="border px-4 py-2 font-bold">PM</td>
-						<td className="border px-4 py-2">Data 1</td>
-						<td className="border px-4 py-2">Data 2</td>
-						<td className="border px-4 py-2">Data 3</td>
-						<td className="border px-4 py-2">Data 4</td>
-						<td className="border px-4 py-2">Data 5</td>
-						<td className="border px-4 py-2">Data 6</td>
-						<td className="border px-4 py-2">Data 7</td>
+
+						{[
+							'Sunday',
+							'Monday',
+							'Tuesday',
+							'Wednesday',
+							'Thursday',
+							'Friday',
+							'Saturday',
+						].map((day) => (
+							<td key={day} className="border px-4 py-2">
+								{/* Render product data based on day */}
+								{schedule
+									.filter((item) => item.time === 'PM')
+									.map((item, index) => (
+										<div key={index}>
+											{item.day === day ? item.product.join(', ') : ''}
+										</div>
+									))}
+							</td>
+						))}
 					</tr>
 				</tbody>
 			</table>
