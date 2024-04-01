@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Ingredient, Brand, SkinConcern
+from .models import Product, Ingredient, Brand, SkinConcern, Week, Schedule
 from django.contrib.auth.models import User
 
 
@@ -32,4 +32,16 @@ class ProductSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
+        fields = "__all__"
+
+
+class WeekSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Week
+        fields = "__all__"
+
+
+class ScheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Schedule
         fields = "__all__"

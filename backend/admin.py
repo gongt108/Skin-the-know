@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Ingredient, Brand, Product, SkinConcern
+from .models import Ingredient, Brand, Product, SkinConcern, Week, Schedule
 
 
 # Register your models here.
@@ -32,3 +32,13 @@ class SkinConcernAdmin(admin.ModelAdmin):
 
 
 admin.site.register(SkinConcern, SkinConcernAdmin)
+
+
+class WeekAdmin(admin.ModelAdmin):
+    list_display = ("id", "name")
+
+
+admin.site.register(Week, WeekAdmin)
+
+
+admin.site.register(Schedule)

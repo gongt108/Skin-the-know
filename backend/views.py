@@ -16,12 +16,14 @@ from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 import json
 
-from .models import Product, Ingredient, Brand, SkinConcern
+from .models import Product, Ingredient, Brand, SkinConcern, Schedule, Week
 from .serializers import (
     ProductSerializer,
     IngredientSerializer,
     BrandSerializer,
     SkinConcernSerializer,
+    ScheduleSerializer,
+    WeekSerializer,
 )
 
 
@@ -261,3 +263,25 @@ class SkinConcernViewSet(viewsets.ViewSet):
         }
 
         return JsonResponse(response_data)
+
+
+class WeekViewSet(viewsets.ViewSet):
+    def list(self, request):
+        queryset = Week.objects.all()
+        serializer = WeekSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = Week.objects.all()
+        week = get_object_or_404(queryset, pk=pk)
+        serializer = WeekSerializer(week)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=["get"])
+    def get_schedule(self, request):
+        # weeks = request.user.week_set
+        # print(weeks.all())
+
+        queryset = Week.objects.all()
+        serializer = WeekSerializer(queryset, many=True)
+        return Response(serializer.data)
