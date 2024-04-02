@@ -34,10 +34,20 @@ function WeekCard({ schedule }) {
 							<td key={day} className="border px-4 py-2">
 								{/* Render product data based on day */}
 								{schedule
-									.filter((item) => item.time === 'AM')
+									.filter((item) => item.schedule.time === 'AM')
 									.map((item, index) => (
-										<div key={index}>
-											{item.day === day ? item.product.join(', ') : ''}
+										<div key={index} className="grid grid-cols-2 gap-2 my-2">
+											{item.schedule.day === day
+												? item.products.map((product) => (
+														<div key={product.id}>
+															<img
+																src={product.img_url}
+																alt="image"
+																className="h-10 w-10 object-contain"
+															/>
+														</div>
+												  ))
+												: ''}
 										</div>
 									))}
 							</td>

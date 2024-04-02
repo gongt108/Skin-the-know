@@ -38,7 +38,7 @@ function Profile() {
 				const data = response.data;
 				console.log(data);
 				setWeeks(data['weeks']);
-				setSchedule(data['schedules']);
+				setSchedule(data['schedule_data']);
 			})
 			.catch((err) => {
 				console.error('Error retrieving schedule:', err);

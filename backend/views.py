@@ -285,12 +285,22 @@ class WeekViewSet(viewsets.ViewSet):
         weeks = Week.objects.all()
         week_serializer = WeekSerializer(weeks, many=True)
         week = weeks[0]
-        schedule = week.schedule_set.all()
-        print(schedule)
-        schedule_serializer = ScheduleSerializer(schedule, many=True)
+        schedules = week.schedule_set.all()
+
+        schedule_data = []
+        for schedule in schedules:
+            products = schedule.product.all()
+            product_serializer = ProductSerializer(products, many=True)
+            # Serialize schedule along with its associated products
+            schedule_data.append(
+                {
+                    "schedule": ScheduleSerializer(schedule).data,
+                    "products": product_serializer.data,
+                }
+            )
 
         response_data = {
             "weeks": week_serializer.data,
-            "schedules": schedule_serializer.data,
+            "schedule_data": schedule_data,
         }
         return Response(response_data)
