@@ -289,7 +289,7 @@ class WeekViewSet(viewsets.ViewSet):
 
         schedule_data = []
         for schedule in schedules:
-            products = schedule.product.all()
+            products = schedule.products.all()
             product_serializer = ProductSerializer(products, many=True)
             # Serialize schedule along with its associated products
             schedule_data.append(

@@ -102,7 +102,7 @@ class Schedule(models.Model):
     ]
 
     week = models.ForeignKey(Week, on_delete=models.CASCADE, null=True)
-    product = models.ManyToManyField(
+    products = models.ManyToManyField(
         Product, blank=True, related_name="schedule_product"
     )
     day = models.CharField(max_length=10, choices=WEEKDAYS, default="Sunday")

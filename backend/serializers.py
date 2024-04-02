@@ -23,6 +23,7 @@ class SkinConcernSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     ingredients = IngredientSerializer(many=True)
+    main_active = IngredientSerializer(many=True)
 
     class Meta:
         model = Product
@@ -35,13 +36,17 @@ class UserSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class WeekSerializer(serializers.ModelSerializer):
+class ScheduleSerializer(serializers.ModelSerializer):
+    products = ProductSerializer(many=True, read_only=True)
+
     class Meta:
-        model = Week
+        model = Schedule
         fields = "__all__"
 
 
-class ScheduleSerializer(serializers.ModelSerializer):
+class WeekSerializer(serializers.ModelSerializer):
+    schedules = ScheduleSerializer(many=True, source="schedule_set")
+
     class Meta:
-        model = Schedule
+        model = Week
         fields = "__all__"
