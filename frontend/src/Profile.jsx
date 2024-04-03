@@ -72,48 +72,64 @@ function Profile() {
 					<div className="flex flex-col mx-auto">
 						<h3 className="flex mx-auto text-lg">{day}</h3>
 						<div className="flex flex-col">
-							<h3 className="flex mx-auto text-lg">AM</h3>
+							<div className="flex justify-between px-2">
+								<h3 className="flex text-lg font-semibold">AM</h3>
+								<a href="/" className="text-sm">
+									Revise
+								</a>
+							</div>
 
-							<table className="table-fixed w-[40rem] my-2">
+							<table className="table-fixed w-[40rem] mb-4">
 								<thead>
 									<tr className="border">
-										<td>Product</td>
-										<td>Actives</td>
+										<td className="w-1/2 flex-none py-1 px-2">Product</td>
+										<td className="w-1/2 flex-none py-1 px-2">Actives</td>
 									</tr>
 								</thead>
-								{schedule
-									.filter((item) => item.schedule.day === day)
-									.map((item, index) => (
-										<div>
-											{item.schedule.time == 'AM'
-												? item.products.map((product) => (
-														<tr>
-															<td className="flex border p-2 items-center">
-																<img
-																	className="h-10 w-10 object-contain me-2"
-																	src={product.img_url}
-																	alt="product image"
-																/>
-																<p>{product.name}</p>
-															</td>
-															<td>
-																{product.main_active.map((ingredient, i) => (
-																	<p>{ingredient.name}</p>
-																))}
-															</td>
-														</tr>
-												  ))
-												: ''}
-										</div>
-									))}
+								<tbody>
+									{schedule
+										.filter((item) => item.schedule.day === day)
+										.map((item, index) => (
+											<>
+												{item.schedule.time == 'AM'
+													? item.products.map((product) => (
+															<tr className="border">
+																<td className="flex-none w-1/2  p-2 border">
+																	<div className="inline-flex items-center">
+																		<img
+																			className="h-10 w-10 object-contain me-2"
+																			src={product.img_url}
+																			alt="product image"
+																		/>
+																		<p>{product.name}</p>
+																	</div>
+																</td>
+																<td className="flex-none p-2 w-1/2">
+																	{product.main_active
+																		.map((ingredient, i) => {
+																			return ingredient.name;
+																		})
+																		.join(', ')}
+																</td>
+															</tr>
+													  ))
+													: ''}
+											</>
+										))}
+								</tbody>
 							</table>
-							<h3 className="flex mx-auto text-lg">PM</h3>
+							<div className="flex justify-between px-2">
+								<h3 className="flex text-lg font-semibold">PM</h3>
+								<a href="/" className="text-sm">
+									Revise
+								</a>
+							</div>
 
-							<table className="table-fixed w-[40rem] my-2">
+							<table className="table-fixed w-[40rem] mb-4">
 								<thead>
 									<tr className="border">
-										<td>Product</td>
-										<td>Actives</td>
+										<td className="w-1/2 flex-none py-1 px-2">Product</td>
+										<td className="w-1/2 flex-none py-1 px-2">Actives</td>
 									</tr>
 								</thead>
 								{schedule
