@@ -4,13 +4,17 @@ import axios from 'axios';
 
 function ScheduleEdit() {
 	const { param1 } = useParams();
-	const query = param1.split('-');
+	const id = param1.split('-')[2];
+	const [schedule, setSchedule] = useState([]);
+
 	useEffect(() => {
-		console.log(query);
 		axios
-			.get('http://localhost:8000/api/weekly_schedule/get_schedule')
+			.get(
+				`http://localhost:8000/api/schedule/${id}/view_or_update_schedule_details`
+			)
 			.then((response) => {
 				const data = response.data;
+				console.log(data);
 			})
 			.catch((err) => {
 				console.error('Error retrieving schedule:', err);

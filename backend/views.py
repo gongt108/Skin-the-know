@@ -304,3 +304,25 @@ class WeekViewSet(viewsets.ViewSet):
             "schedule_data": schedule_data,
         }
         return Response(response_data)
+
+
+class ScheduleViewSet(viewsets.ViewSet):
+    def list(self, request):
+        queryset = Schedule.objects.all()
+        serializer = ScheduleSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = Schedule.objects.all()
+        schedule = get_object_or_404(queryset, pk=pk)
+        serializer = ScheduleSerializer(schedule)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=["get", "post"])
+    def view_or_update_schedule_details(self, request, pk=None):
+        schedule = Schedule.objects.filter(id=pk).first()
+        print(schedule)
+
+        serializer = ScheduleSerializer(schedule, many=False)
+
+        return Response(serializer.data)
