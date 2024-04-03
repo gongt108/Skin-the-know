@@ -1,7 +1,6 @@
 import React from 'react';
 
 function WeekCard({ schedule }) {
-	console.log(schedule);
 	return (
 		<div className="mx-auto flex w-[60rem]">
 			<table className="mx-auto table-fixed mt-4 mb-8 w-[60rem]">

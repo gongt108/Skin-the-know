@@ -14,6 +14,8 @@ import BrandPage from './BrandPage';
 import SearchResults from './SearchResults';
 import CategoryPage from './CategoryPage';
 import Profile from './Profile';
+import Schedule from './Schedule';
+import ScheduleEdit from './components/ScheduleEdit';
 import './input.css';
 
 //instantiating Cookies class by creating cookies object
@@ -28,6 +30,8 @@ const App = () => {
 					<Route path="/login" element={<Login />} />
 					<Route path="/signup" element={<Signup />} />
 					<Route path="/profile" element={<Profile />} />
+					<Route path="/schedule" element={<Schedule />} />
+					<Route path="/schedule/:param1" element={<ScheduleEdit />} />
 					<Route path="/addproduct" element={<AddProduct />} />
 					<Route path="/product/:slug" element={<ProductPage />} />
 					<Route path="/ingredients" element={<IngredientsList />} />
