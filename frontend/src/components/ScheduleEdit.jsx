@@ -28,6 +28,26 @@ function ScheduleEdit() {
 			});
 	}, []);
 
+	const removeFromSchedule = (productId) => {
+		console.log(productId);
+
+		axios
+			.put(
+				`http://localhost:8000/api/schedule/${id}/view_or_update_schedule_details/`,
+				{
+					product: productId,
+					action: 'remove',
+				}
+			)
+			.then((response) => {
+				console.log('Product removed successfully:', response.data);
+				setSchedule(response.data);
+			})
+			.catch((err) => {
+				console.error('Error removing product from schedule:', err);
+			});
+	};
+
 	if (loading) {
 		return <div>Loading...</div>;
 	}
@@ -82,7 +102,10 @@ function ScheduleEdit() {
 									.join(', ')}
 							</td>
 							<td>
-								<div className="cursor-pointer me-4">
+								<div
+									className="cursor-pointer me-4"
+									onClick={() => removeFromSchedule(product.id)}
+								>
 									<FaTrash />
 								</div>
 							</td>

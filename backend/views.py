@@ -11,7 +11,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 from functools import reduce
 
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 import json
@@ -318,11 +318,35 @@ class ScheduleViewSet(viewsets.ViewSet):
         serializer = ScheduleSerializer(schedule)
         return Response(serializer.data)
 
-    @action(detail=True, methods=["get", "post"])
+    @action(detail=True, methods=["get", "post", "put"])
     def view_or_update_schedule_details(self, request, pk=None):
-        schedule = Schedule.objects.filter(id=pk).first()
-        print(schedule)
-
+        schedule = Schedule(id=pk)
         serializer = ScheduleSerializer(schedule, many=False)
+
+        if request.method == "PUT":
+            # Assuming you have product data in the request
+            product_id = request.data.get("product", None)
+            action = request.data.get("action", None)
+            if product_id is not None and action == "remove":
+                product = Product(id=product_id)
+                print(product)
+                print(schedule.products.all())
+                # Assuming you have a method to add or remove products
+                # Here, you would implement the logic to update products
+                # based on the provided product data
+                # For example:
+                # schedule.products.add(*product_data["add"])
+                schedule.products.remove(product)
+                schedule.save()
+
+                # Serialize the updated schedule and return the response
+                serializer = ScheduleSerializer(schedule)
+                return Response(serializer.data)
+            else:
+                # If no product data is provided in the request, return a 400 Bad Request response
+                return Response(
+                    {"error": "Product data is required for updating schedule"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
         return Response(serializer.data)
