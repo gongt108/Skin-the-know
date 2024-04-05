@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
+import { FaTrash } from 'react-icons/fa';
+
 function ScheduleEdit() {
 	const { param1 } = useParams();
 	const id = param1.split('-')[2];
@@ -16,7 +18,6 @@ function ScheduleEdit() {
 			)
 			.then((response) => {
 				const data = response.data;
-				console.log(data);
 				setSchedule(data);
 				setLoading(false);
 			})
@@ -45,12 +46,15 @@ function ScheduleEdit() {
 					<tr>
 						<td className="border py-2 ps-4"> Product</td>
 						<td className="border p-2">Main Actives</td>
-						<td className="border p-2">May cause irritation if used with</td>
+						<td className="border border-r-0 p-2">
+							May cause irritation if used with
+						</td>
+						<td></td>
 					</tr>
 				</thead>
 				<tbody>
 					{schedule.products.map((product, i) => (
-						<tr key={i}>
+						<tr key={i} className="border-y">
 							<td className="border py-2 ps-4 flex">
 								{' '}
 								<img
@@ -67,7 +71,7 @@ function ScheduleEdit() {
 									})
 									.join(', ')}
 							</td>
-							<td className="border py-2 ps-4">
+							<td className="border border-r-0 py-2 ps-4">
 								{product.main_active
 									.map((active) => {
 										return active.avoid_list.map((ingredient) => {
@@ -76,6 +80,11 @@ function ScheduleEdit() {
 									})
 									.flat()
 									.join(', ')}
+							</td>
+							<td>
+								<div className="cursor-pointer me-4">
+									<FaTrash />
+								</div>
 							</td>
 						</tr>
 					))}
