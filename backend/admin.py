@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Ingredient, Brand, Product, SkinConcern, Week, Schedule
+from .models import Ingredient, Brand, Product, SkinConcern, Week, Schedule, Profile
 
 
 # Register your models here.
@@ -42,3 +42,4 @@ admin.site.register(Week, WeekAdmin)
 
 
 admin.site.register(Schedule)
+admin.site.register(Profile)

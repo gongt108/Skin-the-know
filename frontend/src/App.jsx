@@ -6,6 +6,7 @@ import Home from './Home';
 import Layout from './components/Layout';
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup';
+import Logout from './components/auth/Logout';
 import ProductPage from './ProductPage';
 import AddProduct from './AddProduct';
 import IngredientsList from './IngredientsList';
@@ -29,6 +30,7 @@ const App = () => {
 					<Route path="/" exact element={<Home />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/signup" element={<Signup />} />
+					<Route path="/logout" element={<Logout />} />
 					<Route path="/profile" element={<Profile />} />
 					<Route path="/schedule" element={<Schedule />} />
 					<Route path="/schedule/:param1" element={<ScheduleEdit />} />

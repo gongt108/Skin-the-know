@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Ingredient, Brand, SkinConcern, Week, Schedule
+from .models import Product, Ingredient, Brand, SkinConcern, Week, Schedule, Profile
 from django.contrib.auth.models import User
 
 
@@ -49,4 +49,13 @@ class WeekSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Week
+        fields = "__all__"
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    own_list = ProductSerializer(many=True, read_only=True)
+    wishlist = ProductSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Profile
         fields = "__all__"

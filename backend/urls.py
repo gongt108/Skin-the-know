@@ -10,6 +10,7 @@ router.register(r"brands", views.BrandViewSet, basename="brand")
 router.register(r"skinconcern", views.SkinConcernViewSet, basename="skinconcern")
 router.register(r"weekly_schedule", views.WeekViewSet, basename="week")
 router.register(r"schedule", views.ScheduleViewSet, basename="schedule")
+router.register(r"profile", views.ProfileViewSet, basename="profile")
 
 urlpatterns = [
     path("", include(router.urls)),

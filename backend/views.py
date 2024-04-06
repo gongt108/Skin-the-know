@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.postgres.search import TrigramSimilarity
 from django.core.serializers import serialize
 from django.db import models
@@ -16,7 +16,7 @@ from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 import json
 
-from .models import Product, Ingredient, Brand, SkinConcern, Schedule, Week
+from .models import Product, Ingredient, Brand, SkinConcern, Schedule, Week, Profile
 from .serializers import (
     ProductSerializer,
     IngredientSerializer,
@@ -24,6 +24,7 @@ from .serializers import (
     SkinConcernSerializer,
     ScheduleSerializer,
     WeekSerializer,
+    ProfileSerializer,
 )
 
 
@@ -45,6 +46,7 @@ def login_view(request):
     if user is None:
         return JsonResponse({"detail": "User credentials are invalid."}, status=400)
     login(request, user)
+
     return JsonResponse({"details": "Successfully logged in."})
 
 
@@ -329,12 +331,7 @@ class ScheduleViewSet(viewsets.ViewSet):
             action = request.data.get("action", None)
             if product_id is not None and action == "remove":
                 product = Product(id=product_id)
-                print(product)
-                print(schedule.products.all())
-                # Assuming you have a method to add or remove products
-                # Here, you would implement the logic to update products
-                # based on the provided product data
-                # For example:
+
                 # schedule.products.add(*product_data["add"])
                 schedule.products.remove(product)
                 schedule.save()
@@ -349,4 +346,27 @@ class ScheduleViewSet(viewsets.ViewSet):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
+        return Response(serializer.data)
+
+
+class ProfileViewSet(viewsets.ViewSet):
+    def list(self, request):
+        queryset = Profile.objects.all()
+        serializer = ProfileSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = Profile.objects.all()
+        profile = get_object_or_404(queryset, pk=pk)
+        serializer = ProfileSerializer(profile)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=["get"])
+    def account_details(self, request):
+        user = request.user
+        print(user.profile)
+        if user is not AnonymousUser:
+            queryset = user.profile
+
+        serializer = ProfileSerializer(queryset, many=False)
         return Response(serializer.data)
