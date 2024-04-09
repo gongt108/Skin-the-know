@@ -3,6 +3,12 @@ from .models import Product, Ingredient, Brand, SkinConcern, Week, Schedule, Pro
 from django.contrib.auth.models import User
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = "__all__"
+
+
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
@@ -53,6 +59,7 @@ class WeekSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(many=False, read_only=True)
     own_list = ProductSerializer(many=True, read_only=True)
     wishlist = ProductSerializer(many=True, read_only=True)
 

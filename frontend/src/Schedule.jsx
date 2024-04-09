@@ -11,7 +11,7 @@ function Schedule() {
 			.get('http://localhost:8000/api/weekly_schedule/get_schedule')
 			.then((response) => {
 				const data = response.data;
-
+				console.log(data);
 				setWeeks(data['weeks']);
 				setSchedule(data['schedule_data']);
 			})

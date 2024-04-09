@@ -370,3 +370,12 @@ class ProfileViewSet(viewsets.ViewSet):
 
         serializer = ProfileSerializer(queryset, many=False)
         return Response(serializer.data)
+
+    @action(detail=True, methods=["get"])
+    def my_products(self, request):
+        user = request.user
+        if user is not AnonymousUser:
+            queryset = user.own_list
+
+        serializer = ProductSerializer(queryset, many=True)
+        return Response(serializer.data)
