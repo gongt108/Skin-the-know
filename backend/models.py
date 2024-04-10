@@ -80,11 +80,6 @@ class Profile(models.Model):
     wishlist = models.ManyToManyField(Product, blank=True, related_name="wishlist")
 
 
-class Week(models.Model):
-    name = models.CharField(max_length=255, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-
 class Schedule(models.Model):
     WEEKDAYS = [
         ("Sunday", "Sunday"),
@@ -101,9 +96,25 @@ class Schedule(models.Model):
         ("PM", "PM"),
     ]
 
-    week = models.ForeignKey(Week, on_delete=models.CASCADE, null=True)
+    week = models.ForeignKey("Week", on_delete=models.CASCADE, null=True)
     products = models.ManyToManyField(
         Product, blank=True, related_name="schedule_product"
     )
     day = models.CharField(max_length=10, choices=WEEKDAYS, default="Sunday")
     time = models.CharField(max_length=2, choices=WEEK_TIMES, default="AM")
+
+
+class Week(models.Model):
+    name = models.CharField(max_length=255, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        super().save(
+            *args, **kwargs
+        )  # Call the original save method to save the Week instance
+
+        # Iterate over each weekday and time combination
+        for day, _ in Schedule.WEEKDAYS:
+            for time, _ in Schedule.WEEK_TIMES:
+                # Create a Schedule instance for the current combination
+                Schedule.objects.create(week=self, day=day, time=time)
