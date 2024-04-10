@@ -339,6 +339,16 @@ class ScheduleViewSet(viewsets.ViewSet):
                 # Serialize the updated schedule and return the response
                 serializer = ScheduleSerializer(schedule)
                 return Response(serializer.data)
+            elif product_id is not None and action == "add":
+                product = Product(id=product_id)
+
+                # schedule.products.add(*product_data["add"])
+                schedule.products.add(product)
+                schedule.save()
+
+                # Serialize the updated schedule and return the response
+                serializer = ScheduleSerializer(schedule)
+                return Response(serializer.data)
             else:
                 # If no product data is provided in the request, return a 400 Bad Request response
                 return Response(

@@ -8,46 +8,44 @@ import { FaTrash, FaPlusSquare } from 'react-icons/fa';
 function ScheduleEdit() {
 	const { param1 } = useParams();
 	const id = param1.split('-')[2];
-	const [schedule, setSchedule] = useState({});
-	const [myProducts, setMyProducts] = useState([]);
+	const [schedule, setSchedule] = useState();
+	const [myProducts, setMyProducts] = useState();
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const cookies = new Cookies();
 
 	useEffect(() => {
-		axios
-			.get(
-				`http://localhost:8000/api/schedule/${id}/view_or_update_schedule_details`,
-				{
-					headers: {
-						'Content-Type': 'application/json',
-						'X-CSRFToken': cookies.get('csrftoken'),
-					},
-					withCredentials: true,
-				}
-			)
-			.then((response) => {
-				const data = response.data;
-				setSchedule(data);
-			})
-			.catch((err) => {
-				console.error('Error retrieving schedule:', err);
-				setError(err);
-				setLoading(false);
-			});
-
-		axios
-			.get('http://localhost:8000/api/profile/my_products/', {
+		let myScheduleData = axios.get(
+			`http://localhost:8000/api/schedule/${id}/view_or_update_schedule_details`,
+			{
 				headers: {
 					'Content-Type': 'application/json',
 					'X-CSRFToken': cookies.get('csrftoken'),
 				},
 				withCredentials: true,
-			})
-			.then((response) => {
-				setMyProducts(response.data);
-				setLoading(false);
-			})
+			}
+		);
+
+		let ownListData = axios.get(
+			'http://localhost:8000/api/profile/my_products/',
+			{
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRFToken': cookies.get('csrftoken'),
+				},
+				withCredentials: true,
+			}
+		);
+
+		axios
+			.all([myScheduleData, ownListData])
+			.then(
+				axios.spread((mySchedule, ownList) => {
+					setSchedule(mySchedule.data);
+					setMyProducts(ownList.data);
+					setLoading(false);
+				})
+			)
 			.catch((err) => {
 				console.error('Error fetching products information:', err);
 			});
@@ -76,21 +74,21 @@ function ScheduleEdit() {
 	const addToSchedule = (productId) => {
 		console.log(productId);
 
-		// axios
-		// 	.put(
-		// 		`http://localhost:8000/api/schedule/${id}/view_or_update_schedule_details/`,
-		// 		{
-		// 			product: productId,
-		// 			action: 'remove',
-		// 		}
-		// 	)
-		// 	.then((response) => {
-		// 		console.log('Product removed successfully:', response.data);
-		// 		setSchedule(response.data);
-		// 	})
-		// 	.catch((err) => {
-		// 		console.error('Error removing product from schedule:', err);
-		// 	});
+		axios
+			.put(
+				`http://localhost:8000/api/schedule/${id}/view_or_update_schedule_details/`,
+				{
+					product: productId,
+					action: 'add',
+				}
+			)
+			.then((response) => {
+				console.log('Product added successfully:', response.data);
+				setSchedule(response.data);
+			})
+			.catch((err) => {
+				console.error('Error removing product from schedule:', err);
+			});
 	};
 
 	if (loading) {
