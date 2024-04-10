@@ -365,17 +365,19 @@ class ProfileViewSet(viewsets.ViewSet):
     def account_details(self, request):
         user = request.user
         print(user.profile)
-        if user is not AnonymousUser:
+        if not isinstance(user, AnonymousUser):
             queryset = user.profile
+            serializer = ProfileSerializer(queryset, many=False)
+            return Response(serializer.data)
+        else:
+            return Response("User not signed in.", status=400)
 
-        serializer = ProfileSerializer(queryset, many=False)
-        return Response(serializer.data)
-
-    @action(detail=True, methods=["get"])
+    @action(detail=False, methods=["get"])
     def my_products(self, request):
         user = request.user
-        if user is not AnonymousUser:
-            queryset = user.own_list
-
-        serializer = ProductSerializer(queryset, many=True)
-        return Response(serializer.data)
+        if not isinstance(user, AnonymousUser):
+            queryset = user.profile.own_list.all()
+            serializer = ProductSerializer(queryset, many=True)
+            return Response(serializer.data)
+        else:
+            return Response("User not signed in.", status=400)
