@@ -281,12 +281,15 @@ class WeekViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=["get"])
     def get_schedule(self, request):
-        # weeks = request.user.week_set
-        # print(weeks.all())
+        user = request.user
+        if isinstance(user, AnonymousUser):
+            return Response("User not signed in.", status=400)
+        weeks = user.week_set.all()
+        index = request.query_params.get("week")
+        index = int(index)
 
-        weeks = Week.objects.all()
         week_serializer = WeekSerializer(weeks, many=True)
-        week = weeks[0]
+        week = weeks[index]
         schedules = week.schedule_set.all()
 
         schedule_data = []
@@ -374,7 +377,7 @@ class ProfileViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"])
     def account_details(self, request):
         user = request.user
-        print(user.profile)
+
         if not isinstance(user, AnonymousUser):
             queryset = user.profile
             serializer = ProfileSerializer(queryset, many=False)

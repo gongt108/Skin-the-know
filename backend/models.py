@@ -109,12 +109,15 @@ class Week(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
-        super().save(
-            *args, **kwargs
-        )  # Call the original save method to save the Week instance
+        if not self.pk:  # Check if the instance is being created for the first time
+            super().save(
+                *args, **kwargs
+            )  # Call the original save method to save the Week instance
 
-        # Iterate over each weekday and time combination
-        for day, _ in Schedule.WEEKDAYS:
-            for time, _ in Schedule.WEEK_TIMES:
-                # Create a Schedule instance for the current combination
-                Schedule.objects.create(week=self, day=day, time=time)
+            # Iterate over each weekday and time combination
+            for day, _ in Schedule.WEEKDAYS:
+                for time, _ in Schedule.WEEK_TIMES:
+                    # Create a Schedule instance for the current combination
+                    Schedule.objects.create(week=self, day=day, time=time)
+        else:
+            super().save(*args, **kwargs)
