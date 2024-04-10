@@ -101,7 +101,7 @@ function ScheduleEdit() {
 
 	return (
 		<div className="w-[60rem] flex flex-col mx-auto">
-			<h2 className="flex mx-auto font-semibold text-3xl my-4">
+			<h2 className="flex mx-auto font-semibold text-3xl my-8">
 				{schedule.day} {schedule.time} Routine
 			</h2>
 
@@ -109,9 +109,9 @@ function ScheduleEdit() {
 			<table className="border">
 				<thead>
 					<tr>
-						<td className="border py-2 ps-4"> Product</td>
-						<td className="border p-2">Main Actives</td>
-						<td className="border border-r-0 p-2">
+						<td className="border py-2 ps-4 w-2/5">Product</td>
+						<td className="border p-2 w-1/5">Main Actives</td>
+						<td className="border border-r-0 p-2 w-2/5">
 							May cause irritation if used with
 						</td>
 						<td></td>
@@ -129,7 +129,7 @@ function ScheduleEdit() {
 								/>{' '}
 								<p className="ps-2">{product.name}</p>
 							</td>
-							<td className="border py-2 ps-4">
+							<td className="border py-2 ps-4 text-sm">
 								{product.main_active
 									.map((active) => {
 										return active.name;
@@ -161,12 +161,15 @@ function ScheduleEdit() {
 			</table>
 
 			{/* Owned products  */}
-			<table className="border">
+			<h2 className="flex mx-auto font-semibold text-3xl my-8">
+				Products I Own
+			</h2>
+			<table className="border mb-8">
 				<thead>
 					<tr>
-						<td className="border py-2 ps-4">Products I Own</td>
-						<td className="border p-2">Main Actives</td>
-						<td className="border border-r-0 p-2">
+						<td className="border py-2 ps-4 w2/5">Product Name</td>
+						<td className="border p-2 w-1/5">Main Actives</td>
+						<td className="border border-r-0 p-2 w-2/5">
 							May cause irritation if used with
 						</td>
 						<td></td>
@@ -184,7 +187,7 @@ function ScheduleEdit() {
 								/>{' '}
 								<p className="ps-2">{product.name}</p>
 							</td>
-							<td className="border py-2 ps-4">
+							<td className="border py-2 ps-4 text-sm">
 								{product.main_active
 									.map((active) => {
 										return active.name;
