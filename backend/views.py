@@ -301,6 +301,7 @@ class WeekViewSet(viewsets.ViewSet):
                 {
                     "schedule": ScheduleSerializer(schedule).data,
                     "products": product_serializer.data,
+                    "routine_name": week.name,
                 }
             )
 
@@ -309,6 +310,14 @@ class WeekViewSet(viewsets.ViewSet):
             "schedule_data": schedule_data,
         }
         return Response(response_data)
+
+    @action(detail=False, methods=["put"])
+    def add_routine(self, request):
+        user = request.user
+        if isinstance(user, AnonymousUser):
+            return Response("User not signed in.", status=400)
+
+        user.week_set.create()
 
 
 class ScheduleViewSet(viewsets.ViewSet):

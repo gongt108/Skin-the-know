@@ -2,24 +2,24 @@ import React from 'react';
 
 function WeekCard({ schedule }) {
 	return (
-		<div className="mx-auto flex w-[60rem]">
-			<table className="mx-auto table-fixed mt-4 mb-8 w-[60rem]">
+		<div className="mx-auto flex w-full">
+			<table className="mx-auto table-fixed mt-4 mb-8 w-full">
 				<thead className="h-12">
 					<tr>
-						<th className="border px-4 py-2 w-20"></th>
-						<th className="border px-4 py-2">Sunday</th>
-						<th className="border px-4 py-2">Monday</th>
-						<th className="border px-4 py-2">Tuesday</th>
-						<th className="border px-4 py-2">Wednesday</th>
-						<th className="border px-4 py-2">Thursday</th>
-						<th className="border px-4 py-2">Friday</th>
-						<th className="border px-4 py-2">Saturday</th>
+						<th className="border py-2 w-12"></th>
+						<th className="border px-auto py-2">Sunday</th>
+						<th className="border px-auto py-2">Monday</th>
+						<th className="border px-auto py-2">Tuesday</th>
+						<th className="border px-auto py-2">Wednesday</th>
+						<th className="border px-auto py-2">Thursday</th>
+						<th className="border px-auto py-2">Friday</th>
+						<th className="border px-auto py-2">Saturday</th>
 					</tr>
 				</thead>
 				<tbody className="">
 					{/* Render rows for AM */}
 					<tr className="">
-						<td className="border px-4 py-2 font-bold">AM</td>
+						<td className="border text-center py-2 font-bold">AM</td>
 
 						{[
 							'Sunday',
@@ -54,7 +54,7 @@ function WeekCard({ schedule }) {
 					</tr>
 					{/* Render rows for PM */}
 					<tr className="">
-						<td className="border px-4 py-2 font-bold">PM</td>
+						<td className="border text-center font-bold">PM</td>
 
 						{[
 							'Sunday',
