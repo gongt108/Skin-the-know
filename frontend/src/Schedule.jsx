@@ -3,14 +3,16 @@ import WeekCard from './components/WeekCard';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { useNavigate } from 'react-router-dom';
-import { FaTrash, FaPlusSquare } from 'react-icons/fa';
-import { Dropdown, DropdownItem } from 'flowbite-react';
+import { Dropdown, DropdownItem, Modal, Button } from 'flowbite-react';
 
 function Schedule() {
 	const [currentView, setCurrentView] = useState('week');
 	const [weeks, setWeeks] = useState();
 	const [week, setWeek] = useState(0);
 	const [schedule, setSchedule] = useState([]);
+	const [scheduleName, setScheduleName] = useState('');
+	const [edittingName, setEdittingName] = useState(false);
+	const [isDeleting, setIsDeleting] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	const cookies = new Cookies();
 	const navigateTo = useNavigate();
@@ -60,15 +62,58 @@ function Schedule() {
 			.catch((err) => console.error('error creating routine:', err));
 	};
 
+	const renameRoutine = () => {
+		// axios
+		// 	.put('http://localhost:8000/api/weekly_schedule/rename_routine/', null, {
+		// 		headers: {
+		// 			'Content-Type': 'application/json',
+		// 			'X-CSRFToken': cookies.get('csrftoken'),
+		// 		},
+		// 		withCredentials: true,
+		// 	})
+		// 	.then((response) => {
+		// 		console.log(response.data);
+		// 		setWeek(weeks.length);
+		// 	})
+		// 	.catch((err) => console.error('error creating routine:', err));
+	};
+
+	const deleteRoutine = () => {};
+
+	const confirmDelete = (id) => {
+		console.log(id);
+		axios
+			.delete(`http://localhost:8000/api/weekly_schedule/${id}/`, {
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRFToken': cookies.get('csrftoken'),
+				},
+				withCredentials: true,
+			})
+			.then((response) => {
+				console.log(response.data);
+				navigateTo(`/schedule`);
+				setWeek(0);
+			})
+			.catch((err) => console.error('error deleting routine:', err));
+	};
+
 	if (isLoading) {
 		return <div>Loading...</div>;
 	}
 
 	return (
 		<div className="h-full flex flex-col w-[60rem] mx-auto">
-			<h2 className="flex mx-auto font-semibold text-xl mt-4">
-				{schedule[0].routine_name}
-			</h2>
+			{!edittingName && (
+				<h2 className="flex mx-auto font-semibold text-xl mt-4">
+					{schedule[0].routine_name}
+				</h2>
+			)}
+			{edittingName && (
+				<form action="#">
+					<input type="text" value={scheduleName} />
+				</form>
+			)}
 			<div className="flex">
 				<div className={`w-5/6 ${currentView == 'week' ? '' : 'hidden'}`}>
 					{<WeekCard schedule={schedule} />}
@@ -251,11 +296,33 @@ function Schedule() {
 					<div className="w-full border rounded-md p-2 cursor-pointer hover:bg-blue-300">
 						Rename Routine
 					</div>
-					<div className="w-full border rounded-md p-2 cursor-pointer hover:bg-blue-300">
+					<div
+						className="w-full border rounded-md p-2 cursor-pointer hover:bg-blue-300"
+						onClick={() => setIsDeleting(true)}
+					>
 						Delete Routine
 					</div>
 				</div>
 			</div>
+			{/* Confirm Delete Modal */}
+			{isDeleting && (
+				<div className="absolute top-0 left-0 flex justify-center h-full w-full bg-gray-800 bg-opacity-30">
+					<div className="absolute top-1/3  w-fit h-fit bg-slate-800 rounded-md text-white font-lg flex flex-col p-8">
+						<p className="mb-8">
+							Are you sure you want to delete this routine?
+						</p>
+
+						<div className="flex space-x-4 mx-auto">
+							<Button onClick={() => deleteRoutine(schedule[0].routine_id)}>
+								Confirm
+							</Button>
+							<Button color="gray" onClick={() => setIsDeleting(false)}>
+								Cancel
+							</Button>
+						</div>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }

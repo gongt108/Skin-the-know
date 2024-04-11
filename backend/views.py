@@ -290,8 +290,10 @@ class WeekViewSet(viewsets.ViewSet):
         index = request.query_params.get("week")
         index = int(index)
 
-        week_serializer = WeekSerializer(weeks, many=True)
+        weeks_serializer = WeekSerializer(weeks, many=True)
         week = weeks[index]
+        week_serializer = WeekSerializer(week, many=False)
+
         schedules = week.schedule_set.all()
 
         schedule_data = []
@@ -304,11 +306,13 @@ class WeekViewSet(viewsets.ViewSet):
                     "schedule": ScheduleSerializer(schedule).data,
                     "products": product_serializer.data,
                     "routine_name": week.name,
+                    "routine_id": week.id,
                 }
             )
 
         response_data = {
-            "weeks": week_serializer.data,
+            "weeks": weeks_serializer.data,
+            # "week": week_serializer.data,
             "schedule_data": schedule_data,
         }
         return Response(response_data)
@@ -326,6 +330,37 @@ class WeekViewSet(viewsets.ViewSet):
 
         week_serializer = WeekSerializer(new_week, many=False)
         return Response(week_serializer.data)
+
+    @action(detail=False, methods=["put"])
+    def rename_routine(self, request):
+        user = request.user
+        if isinstance(user, AnonymousUser):
+            return Response("User not signed in.", status=400)
+
+        new_week = Week.objects.create(user=user, name="New Routine")
+        user.week_set.add(new_week)
+
+        week_serializer = WeekSerializer(new_week, many=False)
+        return Response(week_serializer.data)
+
+    # @action(detail=True, methods=["delete"])
+    def destroy(self, request, pk=None):
+        user = request.user
+        if isinstance(user, AnonymousUser):
+            return Response("User not signed in.", status=400)
+        try:
+            week_to_delete = user.week_set.get(id=pk)
+            week_to_delete.delete()
+            return Response(
+                "Weekly schedule deleted successfully.",
+                status=status.HTTP_204_NO_CONTENT,
+            )
+        except Week.DoesNotExist:
+            return Response(
+                "Weekly schedule not found.", status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class ScheduleViewSet(viewsets.ViewSet):
