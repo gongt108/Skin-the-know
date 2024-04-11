@@ -46,6 +46,7 @@ def login_view(request):
     if user is None:
         return JsonResponse({"detail": "User credentials are invalid."}, status=400)
     login(request, user)
+    print(user)
 
     return JsonResponse({"details": "Successfully logged in."})
 
@@ -282,6 +283,7 @@ class WeekViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"])
     def get_schedule(self, request):
         user = request.user
+        print(user)
         if isinstance(user, AnonymousUser):
             return Response("User not signed in.", status=400)
         weeks = user.week_set.all()
@@ -313,11 +315,17 @@ class WeekViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=["put"])
     def add_routine(self, request):
+
         user = request.user
+        print(user)
         if isinstance(user, AnonymousUser):
             return Response("User not signed in.", status=400)
 
-        user.week_set.create()
+        new_week = Week.objects.create(user=user)
+        user.week_set.add(new_week)
+
+        week_serializer = WeekSerializer(new_week, many=False)
+        return Response(week_serializer.data)
 
 
 class ScheduleViewSet(viewsets.ViewSet):
