@@ -11,7 +11,9 @@ function Schedule() {
 	const [week, setWeek] = useState(0);
 	const [schedule, setSchedule] = useState([]);
 	const [scheduleName, setScheduleName] = useState('');
-	const [edittingName, setEdittingName] = useState(false);
+	const [scheduleId, setScheduleId] = useState('');
+	const [nameChange, setNameChange] = useState('');
+	const [isEditing, setIsEditing] = useState(false);
 	const [isDeleting, setIsDeleting] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	const cookies = new Cookies();
@@ -34,6 +36,8 @@ function Schedule() {
 				console.log(data);
 				setWeeks(data['weeks']);
 				setSchedule(data['schedule_data']);
+				setScheduleName(data['routine_name']);
+				setScheduleId(data['routine_id']);
 				setIsLoading(false);
 			})
 			.catch((err) => {
@@ -62,26 +66,39 @@ function Schedule() {
 			.catch((err) => console.error('error creating routine:', err));
 	};
 
-	const renameRoutine = () => {
-		// axios
-		// 	.put('http://localhost:8000/api/weekly_schedule/rename_routine/', null, {
-		// 		headers: {
-		// 			'Content-Type': 'application/json',
-		// 			'X-CSRFToken': cookies.get('csrftoken'),
-		// 		},
-		// 		withCredentials: true,
-		// 	})
-		// 	.then((response) => {
-		// 		console.log(response.data);
-		// 		setWeek(weeks.length);
-		// 	})
-		// 	.catch((err) => console.error('error creating routine:', err));
+	const handleNameChange = (e) => {
+		e.preventDefault();
+		setNameChange(e.target.value);
 	};
 
-	const deleteRoutine = () => {};
+	const renameRoutine = () => {
+		console.log(scheduleId);
+		console.log(nameChange);
+		if (!nameChange.trim()) return;
 
-	const confirmDelete = (id) => {
-		console.log(id);
+		axios
+			.patch(
+				`http://localhost:8000/api/weekly_schedule/${scheduleId}/`,
+				{ name: nameChange },
+				{
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRFToken': cookies.get('csrftoken'),
+					},
+					withCredentials: true,
+				}
+			)
+			.then((response) => {
+				console.log(response.data);
+				setIsEditing(false);
+				setNameChange('');
+				setScheduleName(nameChange);
+				// setWeek(week);
+			})
+			.catch((err) => console.error('error updating routine name:', err));
+	};
+
+	const deleteRoutine = (id) => {
 		axios
 			.delete(`http://localhost:8000/api/weekly_schedule/${id}/`, {
 				headers: {
@@ -92,6 +109,7 @@ function Schedule() {
 			})
 			.then((response) => {
 				console.log(response.data);
+				setIsDeleting(false);
 				navigateTo(`/schedule`);
 				setWeek(0);
 			})
@@ -104,16 +122,10 @@ function Schedule() {
 
 	return (
 		<div className="h-full flex flex-col w-[60rem] mx-auto">
-			{!edittingName && (
-				<h2 className="flex mx-auto font-semibold text-xl mt-4">
-					{schedule[0].routine_name}
-				</h2>
-			)}
-			{edittingName && (
-				<form action="#">
-					<input type="text" value={scheduleName} />
-				</form>
-			)}
+			<h2 className="flex mx-auto font-semibold text-xl mt-4">
+				{scheduleName}
+			</h2>
+
 			<div className="flex">
 				<div className={`w-5/6 ${currentView == 'week' ? '' : 'hidden'}`}>
 					{<WeekCard schedule={schedule} />}
@@ -293,7 +305,10 @@ function Schedule() {
 					>
 						New Routine
 					</div>
-					<div className="w-full border rounded-md p-2 cursor-pointer hover:bg-blue-300">
+					<div
+						className="w-full border rounded-md p-2 cursor-pointer hover:bg-blue-300"
+						onClick={() => setIsEditing(true)}
+					>
 						Rename Routine
 					</div>
 					<div
@@ -304,6 +319,32 @@ function Schedule() {
 					</div>
 				</div>
 			</div>
+			{/* Edit Name Modal */}
+			{isEditing && (
+				<div className="absolute top-0 left-0 flex justify-center h-full w-full bg-gray-800 bg-opacity-30">
+					<div className="absolute top-1/3  w-fit h-fit bg-slate-800 rounded-md text-white font-lg flex flex-col p-8">
+						<form action="#" onChange={handleNameChange}>
+							<input
+								type="text"
+								placeholder={scheduleName}
+								className="text-black"
+							/>
+							<div className="flex space-x-4 mx-auto">
+								<Button onClick={renameRoutine}>Confirm</Button>
+								<Button
+									color="gray"
+									onClick={() => {
+										setIsEditing(false);
+										setNameChange('');
+									}}
+								>
+									Cancel
+								</Button>
+							</div>
+						</form>
+					</div>
+				</div>
+			)}
 			{/* Confirm Delete Modal */}
 			{isDeleting && (
 				<div className="absolute top-0 left-0 flex justify-center h-full w-full bg-gray-800 bg-opacity-30">

@@ -283,7 +283,6 @@ class WeekViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"])
     def get_schedule(self, request):
         user = request.user
-        print(user)
         if isinstance(user, AnonymousUser):
             return Response("User not signed in.", status=400)
         weeks = user.week_set.all()
@@ -305,8 +304,6 @@ class WeekViewSet(viewsets.ViewSet):
                 {
                     "schedule": ScheduleSerializer(schedule).data,
                     "products": product_serializer.data,
-                    "routine_name": week.name,
-                    "routine_id": week.id,
                 }
             )
 
@@ -314,6 +311,8 @@ class WeekViewSet(viewsets.ViewSet):
             "weeks": weeks_serializer.data,
             # "week": week_serializer.data,
             "schedule_data": schedule_data,
+            "routine_name": week.name,
+            "routine_id": week.id,
         }
         return Response(response_data)
 
@@ -321,7 +320,6 @@ class WeekViewSet(viewsets.ViewSet):
     def add_routine(self, request):
 
         user = request.user
-        print(user)
         if isinstance(user, AnonymousUser):
             return Response("User not signed in.", status=400)
 
@@ -331,17 +329,23 @@ class WeekViewSet(viewsets.ViewSet):
         week_serializer = WeekSerializer(new_week, many=False)
         return Response(week_serializer.data)
 
-    @action(detail=False, methods=["put"])
-    def rename_routine(self, request):
+    def partial_update(self, request, pk=None):
         user = request.user
         if isinstance(user, AnonymousUser):
             return Response("User not signed in.", status=400)
+        new_name = request.data.get("name")
 
-        new_week = Week.objects.create(user=user, name="New Routine")
-        user.week_set.add(new_week)
+        try:
+            week_to_update = user.week_set.get(id=pk)
+            week_to_update.name = new_name
+            week_to_update.save()
+        except Exception as e:
+            return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        week_serializer = WeekSerializer(new_week, many=False)
-        return Response(week_serializer.data)
+        return Response(
+            "Weekly schedule updated successfully.",
+            status=200,
+        )
 
     # @action(detail=True, methods=["delete"])
     def destroy(self, request, pk=None):
