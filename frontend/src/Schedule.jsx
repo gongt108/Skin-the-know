@@ -53,7 +53,10 @@ function Schedule() {
 				},
 				withCredentials: true,
 			})
-			.then((response) => console.log(response.data))
+			.then((response) => {
+				console.log(response.data);
+				setWeek(weeks.length);
+			})
 			.catch((err) => console.error('error creating routine:', err));
 	};
 

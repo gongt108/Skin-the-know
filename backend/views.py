@@ -321,7 +321,7 @@ class WeekViewSet(viewsets.ViewSet):
         if isinstance(user, AnonymousUser):
             return Response("User not signed in.", status=400)
 
-        new_week = Week.objects.create(user=user)
+        new_week = Week.objects.create(user=user, name="New Routine")
         user.week_set.add(new_week)
 
         week_serializer = WeekSerializer(new_week, many=False)
