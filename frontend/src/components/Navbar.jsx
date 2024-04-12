@@ -14,6 +14,7 @@ const customTheme = {
 function Navbar() {
 	const cookies = new Cookies();
 	const token = cookies.get('csrftoken');
+	console.log(token);
 
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [isSearching, setIsSearching] = useState(false);

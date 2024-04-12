@@ -14,6 +14,9 @@ function Logout() {
 			})
 			.catch((err) => {
 				console.error('Error logging out:', err);
+				setTimeout(() => {
+					navigate('/');
+				}, 3000);
 			});
 	});
 	return <div>You have been logged out. Redirecting to Home Page...</div>;

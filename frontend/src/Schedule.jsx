@@ -98,9 +98,9 @@ function Schedule() {
 			.catch((err) => console.error('error updating routine name:', err));
 	};
 
-	const deleteRoutine = (id) => {
+	const deleteRoutine = () => {
 		axios
-			.delete(`http://localhost:8000/api/weekly_schedule/${id}/`, {
+			.delete(`http://localhost:8000/api/weekly_schedule/${scheduleId}/`, {
 				headers: {
 					'Content-Type': 'application/json',
 					'X-CSRFToken': cookies.get('csrftoken'),
@@ -122,7 +122,7 @@ function Schedule() {
 
 	return (
 		<div className="h-full flex flex-col w-[60rem] mx-auto">
-			<h2 className="flex mx-auto font-semibold text-xl mt-4">
+			<h2 className="flex mx-auto font-semibold text-2xl mt-4">
 				{scheduleName}
 			</h2>
 
@@ -131,7 +131,6 @@ function Schedule() {
 					{<WeekCard schedule={schedule} />}
 				</div>
 				<div className={`w-5/6 ${currentView == 'daily' ? '' : 'hidden'}`}>
-					<h2 className="flex mx-auto font-semibold text-xl">Breakdown</h2>
 					<div className="flex flex-col">
 						{[
 							'Sunday',
@@ -154,8 +153,8 @@ function Schedule() {
 								(item) => item.schedule.time === 'PM'
 							);
 							return (
-								<div className="flex flex-col mx-auto" key={day}>
-									<h3 className="flex mx-auto text-lg">{day}</h3>
+								<div className="flex flex-col " key={day}>
+									<h3 className="flex text-xl font-semibold">{day}</h3>
 									<div className="flex flex-col">
 										{/* Render AM schedule */}
 										{amSchedule.map((item, index) => (
@@ -354,9 +353,7 @@ function Schedule() {
 						</p>
 
 						<div className="flex space-x-4 mx-auto">
-							<Button onClick={() => deleteRoutine(schedule[0].routine_id)}>
-								Confirm
-							</Button>
+							<Button onClick={deleteRoutine}>Confirm</Button>
 							<Button color="gray" onClick={() => setIsDeleting(false)}>
 								Cancel
 							</Button>
