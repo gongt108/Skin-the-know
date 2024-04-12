@@ -26,7 +26,6 @@ function Login() {
 	const login = (event) => {
 		event.preventDefault();
 
-		console.log(user);
 		// Make a POST request to the "/api/login/" URL with the form data
 		axios
 			.post(

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
@@ -44,7 +44,6 @@ const App = () => {
 				</Routes>
 			</Layout>
 		</Router>
-		// <h1 className="text-3xl font-bold underline">Hello world!</h1>
 	);
 };
 

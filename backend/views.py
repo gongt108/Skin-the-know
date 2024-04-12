@@ -66,16 +66,21 @@ def register_view(request):
 
 
 def logout_view(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({"detail": "You are not logged in."}, status=400)
+    # if not request.user.is_authenticated:
+    #     return JsonResponse({"detail": "You are not logged in."}, status=400)
     logout(request)
+    print(request.user)
+
     return JsonResponse({"detail": "Successfully logged out."})
 
 
 @ensure_csrf_cookie
 def session_view(request):
+    print(request.user)
+
     if not request.user.is_authenticated:
         return JsonResponse({"isauthenticated": False})
+
     return JsonResponse({"isauthenticated": True})
 
 

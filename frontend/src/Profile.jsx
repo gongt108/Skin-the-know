@@ -8,7 +8,6 @@ function Profile() {
 	const [user, setUser] = useState();
 	const cookies = new Cookies();
 	const token = cookies.get('csrftoken');
-	console.log(token);
 
 	useEffect(() => {
 		axios
@@ -20,7 +19,6 @@ function Profile() {
 				withCredentials: true,
 			})
 			.then((response) => {
-				console.log(response.data);
 				setUser(response.data);
 				setIsLoading(false);
 			})

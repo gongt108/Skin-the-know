@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dropdown, DropdownItem } from 'flowbite-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Cookies from 'universal-cookie';
+import axios from 'axios';
 
 const customTheme = {
 	button: {
@@ -12,11 +13,29 @@ const customTheme = {
 };
 
 function Navbar() {
-	const cookies = new Cookies();
-	const token = cookies.get('csrftoken');
-	console.log(token);
-
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const cookies = new Cookies();
+	const { pathname: pathNow } = useLocation();
+
+	useEffect(() => {
+		console.log('hello');
+		axios
+			.get('http://localhost:8000/api/session/', {
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRFToken': cookies.get('csrftoken'),
+				},
+				withCredentials: true,
+			})
+			.then((response) => {
+				console.log(response.data);
+				setIsLoggedIn(response.data.isauthenticated);
+			})
+			.catch((err) => {
+				console.error(err);
+			});
+	}, [pathNow]);
+
 	const [isSearching, setIsSearching] = useState(false);
 	const [searchTerm, setSeachTerm] = useState('');
 	const navigateTo = useNavigate();
@@ -245,7 +264,7 @@ function Navbar() {
 										</DropdownItem>
 										<DropdownItem
 											as="a"
-											href="/"
+											href="/logout"
 											style={{ color: 'inherit', textDecoration: 'none' }}
 											onMouseEnter={(e) => (e.target.style.color = '#112554')}
 											onMouseLeave={(e) => (e.target.style.color = 'inherit')}

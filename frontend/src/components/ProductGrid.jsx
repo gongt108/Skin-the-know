@@ -21,8 +21,8 @@ function ProductGrid() {
 				</div>
 
 				{products &&
-					products.map((product) => (
-						<div className="relative group" key={product.pk}>
+					products.map((product, i) => (
+						<div className="relative group" key={i}>
 							<a href={`/product/${product.unique_identifier}`}>
 								<img
 									src={product.img_url}
