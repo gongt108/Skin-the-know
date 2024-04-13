@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Signup() {
 	const [newUser, setNewUser] = useState({
@@ -10,6 +11,7 @@ function Signup() {
 		isAuthenticated: false,
 	});
 	const [error, setError] = useState('');
+	const navigateTo = useNavigate();
 
 	const handleChange = (e) => {
 		setNewUser((prevValue) => {
@@ -55,6 +57,7 @@ function Signup() {
 			)
 			.then((response) => {
 				console.log(response.data);
+				navigateTo('/');
 			})
 			.catch((error) => {
 				console.error(error);
@@ -63,8 +66,8 @@ function Signup() {
 	};
 
 	return (
-		<section className="bg-gray-50 dark:bg-gray-900">
-			<div className="flex flex-col items-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+		<section className="bg-gray-50  flex mx-auto w-[60rem]">
+			<div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
 				<div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
 					<div className="p-6 space-y-4 md:space-y-6 sm:p-8">
 						<h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
