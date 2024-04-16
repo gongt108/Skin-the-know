@@ -36,12 +36,6 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = "__all__"
-
-
 class ScheduleSerializer(serializers.ModelSerializer):
     products = ProductSerializer(many=True, read_only=True)
 
@@ -59,7 +53,7 @@ class WeekSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False, read_only=True)
+    user = UserSerializer(many=False, read_only=False)
     own_list = ProductSerializer(many=True, read_only=True)
     wishlist = ProductSerializer(many=True, read_only=True)
 

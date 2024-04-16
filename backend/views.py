@@ -18,13 +18,14 @@ import json
 
 from .models import Product, Ingredient, Brand, SkinConcern, Schedule, Week, Profile
 from .serializers import (
-    ProductSerializer,
-    IngredientSerializer,
     BrandSerializer,
-    SkinConcernSerializer,
-    ScheduleSerializer,
-    WeekSerializer,
+    IngredientSerializer,
+    ProductSerializer,
     ProfileSerializer,
+    ScheduleSerializer,
+    SkinConcernSerializer,
+    UserSerializer,
+    WeekSerializer,
 )
 
 
@@ -437,6 +438,17 @@ class ProfileViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=["get"])
     def account_details(self, request):
+        user = request.user
+
+        if not isinstance(user, AnonymousUser):
+            queryset = user.profile
+            serializer = ProfileSerializer(queryset, many=False)
+            return Response(serializer.data)
+        else:
+            return Response("User not signed in.", status=400)
+
+    @action(detail=False, methods=["put"])
+    def update_account(self, request):
         user = request.user
 
         if not isinstance(user, AnonymousUser):
