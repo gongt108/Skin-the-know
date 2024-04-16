@@ -26,6 +26,11 @@ function Profile() {
 			})
 			.then((response) => {
 				setUser(response.data);
+				setNewUserInfo({
+					firstName: response.data.user.first_name || '',
+					lastName: response.data.user.last_name || '',
+					email: response.data.user.email || '',
+				});
 				setIsLoading(false);
 			})
 			.catch((err) => {
@@ -40,14 +45,34 @@ function Profile() {
 	};
 
 	const saveProfile = (e) => {
-		// e.preventDefault();
+		e.preventDefault();
 		console.log(newUserInfo);
-		setIsEditing(false);
-		setNewUserInfo({
-			firstName: '',
-			lastName: '',
-			email: '',
-		});
+		axios
+			.put(
+				`http://localhost:8000/api/profile/update_account/`,
+				{
+					first_name: newUserInfo.firstName,
+					last_name: newUserInfo.lastName,
+					email: newUserInfo.email,
+				},
+				{
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRFToken': cookies.get('csrftoken'),
+					},
+					withCredentials: true,
+				}
+			)
+			.then((response) => {
+				setUser(response.data);
+				setIsEditing(false);
+			})
+			.catch((err) => console.error('error updating profile:', err));
+		// setNewUserInfo({
+		// 	firstName: '',
+		// 	lastName: '',
+		// 	email: '',
+		// });
 	};
 
 	if (isLoading) {
@@ -111,41 +136,36 @@ function Profile() {
 								</button>
 							</div>
 						</div>
-						<div className="flex my-2">
+						<div className="flex my-2 items-center">
 							<label htmlFor="firstName" className="w-48">
 								First Name:
 							</label>
 							<input
-								required
 								type="text"
 								name="firstName"
-								placeholder={
-									user.user.first_name ? user.user.first_name : 'Not set yet'
-								}
+								value={newUserInfo.firstName}
+								className="border p-1"
 							/>
 						</div>
-						<div className="flex">
+						<div className="flex items-center">
 							<label htmlFor="lastName" className="w-48">
 								Last Name:
 							</label>
 							<input
-								required
 								type="text"
 								name="lastName"
-								placeholder={
-									user.user.last_name ? user.user.last_name : 'Not set yet'
-								}
+								value={newUserInfo.lastName}
+								className="border p-1"
 							/>
 						</div>
-						<div className="flex my-2">
+						<div className="flex my-2 items-center">
 							<label htmlFor="email" className="w-48">
 								Email:
 							</label>
 							<input
-								required
 								type="email"
-								name="email"
-								placeholder={user.user.email ? user.user.email : 'Not set yet'}
+								className="border p-1"
+								value={newUserInfo.email}
 							/>
 						</div>
 					</form>

@@ -451,12 +451,28 @@ class ProfileViewSet(viewsets.ViewSet):
     def update_account(self, request):
         user = request.user
 
-        if not isinstance(user, AnonymousUser):
+        if isinstance(user, AnonymousUser):
+            return Response("User not signed in.", status=400)
+
+        first_name = request.data.get("first_name").strip() or user.first_name
+        last_name = request.data.get("last_name").strip() or user.last_name
+        email = request.data.get("email").strip() or user.email
+
+        # print(request.data)
+        try:
+            for field_name in request.data:
+                setattr(user, field_name, request.data.get(field_name).strip())
+            user.save()
             queryset = user.profile
             serializer = ProfileSerializer(queryset, many=False)
             return Response(serializer.data)
-        else:
-            return Response("User not signed in.", status=400)
+        except Exception as e:
+            return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        queryset = user.profile
+
+        serializer = ProfileSerializer(queryset, many=False)
+        return Response(serializer.data)
 
     @action(detail=False, methods=["get"])
     def my_products(self, request):
