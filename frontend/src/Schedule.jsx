@@ -8,7 +8,7 @@ import { Dropdown, DropdownItem, Modal, Button } from 'flowbite-react';
 function Schedule() {
 	const [currentView, setCurrentView] = useState('week');
 	const [weeks, setWeeks] = useState();
-	const [week, setWeek] = useState(0);
+	const [week, setWeek] = useState(-1);
 	const [schedule, setSchedule] = useState([]);
 	const [scheduleName, setScheduleName] = useState('');
 	const [scheduleId, setScheduleId] = useState('');
@@ -51,9 +51,9 @@ function Schedule() {
 			});
 	}, [week]);
 
-	const weekSelection = (i) => {
+	const weekSelection = (i, id) => {
 		navigateTo(`/schedule?week=${i + 1}`);
-		setWeek(i);
+		setWeek(id);
 	};
 
 	const addRoutine = () => {
@@ -286,7 +286,7 @@ function Schedule() {
 									<div
 										className="text-blue-500 cursor-pointer"
 										key={i}
-										onClick={() => weekSelection(i)}
+										onClick={() => weekSelection(i, week.id)}
 									>
 										<DropdownItem
 											style={{ color: 'inherit', textDecoration: 'none' }}

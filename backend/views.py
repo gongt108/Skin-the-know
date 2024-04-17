@@ -297,11 +297,14 @@ class WeekViewSet(viewsets.ViewSet):
                 "Weekly schedule not found.", status=status.HTTP_404_NOT_FOUND
             )
         index = request.query_params.get("week")
-        index = int(index)
+        if index == "-1":
+            week = weeks.first()
+        else:
+            # index = int(index)
+            week = weeks.get(id=index)
 
         weeks_serializer = WeekSerializer(weeks, many=True)
-        week = weeks[index]
-        week_serializer = WeekSerializer(week, many=False)
+        # week_serializer = WeekSerializer(week, many=False)
 
         schedules = week.schedule_set.all()
 
