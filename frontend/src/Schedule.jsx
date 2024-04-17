@@ -16,6 +16,7 @@ function Schedule() {
 	const [isEditing, setIsEditing] = useState(false);
 	const [isDeleting, setIsDeleting] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
+	const [error, setError] = useState(null);
 	const cookies = new Cookies();
 	const navigateTo = useNavigate();
 
@@ -34,6 +35,9 @@ function Schedule() {
 			.then((response) => {
 				const data = response.data;
 				console.log(data);
+				// Check if the response indicates that no schedule was found
+
+				// If a schedule was found, update the state with the data
 				setWeeks(data['weeks']);
 				setSchedule(data['schedule_data']);
 				setScheduleName(data['routine_name']);
@@ -42,6 +46,8 @@ function Schedule() {
 			})
 			.catch((err) => {
 				console.error('Error retrieving schedule:', err);
+				setError(err);
+				setIsLoading(false);
 			});
 	}, [week]);
 
@@ -118,6 +124,21 @@ function Schedule() {
 
 	if (isLoading) {
 		return <div>Loading...</div>;
+	}
+
+	if (error && error.response.status === 404) {
+		return (
+			<div className="h-full mt-4 flex flex-col w-[60rem] mx-auto">
+				<p className="text-lg ">You don't have any saved routines.</p>
+
+				<div
+					className="w-1/6 border mt-4 rounded-md p-2 cursor-pointer hover:bg-blue-300"
+					onClick={addRoutine}
+				>
+					Add One?
+				</div>
+			</div>
+		);
 	}
 
 	return (

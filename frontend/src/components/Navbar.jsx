@@ -18,7 +18,6 @@ function Navbar() {
 	const { pathname: pathNow } = useLocation();
 
 	useEffect(() => {
-		console.log('hello');
 		axios
 			.get('http://localhost:8000/api/session/', {
 				headers: {
@@ -28,7 +27,6 @@ function Navbar() {
 				withCredentials: true,
 			})
 			.then((response) => {
-				console.log(response.data);
 				setIsLoggedIn(response.data.isauthenticated);
 			})
 			.catch((err) => {

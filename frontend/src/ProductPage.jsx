@@ -1,10 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Dropdown, DropdownItem } from 'flowbite-react';
 import { useParams } from 'react-router-dom';
+import Cookies from 'universal-cookie';
+
+const customTheme = {
+	color: {
+		primary: {
+			base: 'bg-red-500',
+			hover: 'hover:bg-red-600',
+			dark: 'bg-blue-500', // Dark mode base color
+			darkHover: 'hover:bg-blue-600',
+		},
+	},
+};
 
 function ProductPage() {
 	const [productInfo, setProductInfo] = useState();
 	const [isCollapsed, setIsCollapsed] = useState(true);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const cookies = new Cookies();
 	const { slug } = useParams();
 
 	useEffect(() => {
@@ -16,6 +31,21 @@ function ProductPage() {
 			.catch((err) => {
 				console.error('Error retrieving product info:', err);
 			});
+
+		axios
+			.get('http://localhost:8000/api/session/', {
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRFToken': cookies.get('csrftoken'),
+				},
+				withCredentials: true,
+			})
+			.then((response) => {
+				setIsLoggedIn(response.data.isauthenticated);
+			})
+			.catch((err) => {
+				console.error(err);
+			});
 	}, [slug]);
 
 	const toggleCollapse = () => {
@@ -26,12 +56,32 @@ function ProductPage() {
 		<div className="w-[60rem] mx-auto flex">
 			{productInfo && (
 				<div className="flex w-full">
-					<div className="w-1/2 h-full p-16">
+					<div className="w-1/2 h-full p-16 flex flex-col align-middle">
 						<img
 							src={productInfo.img_url}
 							alt="product image"
 							className="w-68 p-4 mx-auto"
 						/>
+						<Dropdown
+							dismissOnClick={false}
+							className="w-[20rem] bg-white"
+							theme={customTheme}
+							renderTrigger={() => (
+								<span className="text-white  font-semibold bg-teal-500 border-2 border-teal-500 text-center rounded-md p-2 cursor-pointer hover:text-teal-500 hover:bg-white">
+									Add to List
+								</span>
+							)}
+						>
+							<DropdownItem
+								// as="a"
+								// href="/"
+								// onMouseEnter={(e) => (e.target.style.color = '#112554')}
+								// onMouseLeave={(e) => (e.target.style.color = 'inherit')}
+								className="text-white  font-semibold bg-teal-500 border-2 border-teal-500 text-center rounded-md p-2 cursor-pointer hover:text-teal-500 hover:bg-white"
+							>
+								Acne
+							</DropdownItem>
+						</Dropdown>
 					</div>
 					<div className="w-1/2 h-full">
 						<div className="border-b">

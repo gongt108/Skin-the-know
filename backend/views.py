@@ -292,6 +292,10 @@ class WeekViewSet(viewsets.ViewSet):
         if isinstance(user, AnonymousUser):
             return Response("User not signed in.", status=400)
         weeks = user.week_set.all()
+        if not weeks.exists():
+            return Response(
+                "Weekly schedule not found.", status=status.HTTP_404_NOT_FOUND
+            )
         index = request.query_params.get("week")
         index = int(index)
 
