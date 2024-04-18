@@ -42,6 +42,7 @@ function Schedule() {
 				setSchedule(data['schedule_data']);
 				setScheduleName(data['routine_name']);
 				setScheduleId(data['routine_id']);
+				setError(null);
 				setIsLoading(false);
 			})
 			.catch((err) => {
@@ -67,7 +68,7 @@ function Schedule() {
 			})
 			.then((response) => {
 				console.log(response.data);
-				setWeek(weeks.length);
+				setWeek(response.data.id);
 			})
 			.catch((err) => console.error('error creating routine:', err));
 	};
@@ -117,7 +118,7 @@ function Schedule() {
 				console.log(response.data);
 				setIsDeleting(false);
 				navigateTo(`/schedule`);
-				setWeek(0);
+				setWeek(-1);
 			})
 			.catch((err) => console.error('error deleting routine:', err));
 	};
