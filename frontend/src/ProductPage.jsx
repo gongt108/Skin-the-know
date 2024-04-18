@@ -52,6 +52,10 @@ function ProductPage() {
 		setIsCollapsed(!isCollapsed);
 	};
 
+	const addToList = (list) => {
+		console.log(list);
+	};
+
 	return (
 		<div className="w-[60rem] mx-auto flex">
 			{productInfo && (
@@ -62,26 +66,52 @@ function ProductPage() {
 							alt="product image"
 							className="w-68 p-4 mx-auto"
 						/>
-						<Dropdown
-							dismissOnClick={false}
-							className="w-[20rem] bg-white"
-							theme={customTheme}
-							renderTrigger={() => (
-								<span className="text-white  font-semibold bg-teal-500 border-2 border-teal-500 text-center rounded-md p-2 cursor-pointer hover:text-teal-500 hover:bg-white">
-									Add to List
-								</span>
-							)}
-						>
-							<DropdownItem
-								// as="a"
-								// href="/"
-								// onMouseEnter={(e) => (e.target.style.color = '#112554')}
-								// onMouseLeave={(e) => (e.target.style.color = 'inherit')}
-								className="text-white  font-semibold bg-teal-500 border-2 border-teal-500 text-center rounded-md p-2 cursor-pointer hover:text-teal-500 hover:bg-white"
+						{isLoggedIn && (
+							<Dropdown
+								dismissOnClick={false}
+								className="w-[20rem] bg-white"
+								theme={customTheme}
+								renderTrigger={() => (
+									<span className="text-white  font-semibold bg-teal-500 border-2 border-teal-500 text-center rounded-md p-2 cursor-pointer hover:text-teal-500 hover:bg-white dark:bg-teal-500">
+										Add to List
+									</span>
+								)}
 							>
-								Acne
-							</DropdownItem>
-						</Dropdown>
+								<DropdownItem
+									// as="a"
+									// href="/"
+									style={{ color: 'inherit', textDecoration: 'none' }}
+									onMouseEnter={(e) => (e.target.style.color = '#112554')}
+									onMouseLeave={(e) => (e.target.style.color = 'inherit')}
+									onClick={() => addToList('favorites')}
+									className="font-semibold text-center rounded-md p-2 cursor-pointer hover:text-blue-950"
+								>
+									Favorites{' '}
+								</DropdownItem>
+								<DropdownItem
+									// as="a"
+									// href="/"
+									style={{ color: 'inherit', textDecoration: 'none' }}
+									onMouseEnter={(e) => (e.target.style.color = '#112554')}
+									onMouseLeave={(e) => (e.target.style.color = 'inherit')}
+									onClick={() => addToList('purchased')}
+									className="font-semibold text-center rounded-md p-2 cursor-pointer hover:text-blue-950"
+								>
+									Purchased
+								</DropdownItem>
+								<DropdownItem
+									// as="a"
+									// href="/"
+									style={{ color: 'inherit', textDecoration: 'none' }}
+									onMouseEnter={(e) => (e.target.style.color = '#112554')}
+									onMouseLeave={(e) => (e.target.style.color = 'inherit')}
+									onClick={() => addToList('wishlist')}
+									className="font-semibold text-center rounded-md p-2 cursor-pointer hover:text-blue-950"
+								>
+									Wishlist
+								</DropdownItem>
+							</Dropdown>
+						)}
 					</div>
 					<div className="w-1/2 h-full">
 						<div className="border-b">
