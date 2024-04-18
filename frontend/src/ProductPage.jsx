@@ -54,6 +54,27 @@ function ProductPage() {
 
 	const addToList = (list) => {
 		console.log(list);
+		axios
+			.put(
+				'http://localhost:8000/api/profile/add_to_list/',
+				{
+					list: list,
+					product_pk: 400,
+				},
+				{
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRFToken': cookies.get('csrftoken'),
+					},
+					withCredentials: true,
+				}
+			)
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.error(err);
+			});
 	};
 
 	return (

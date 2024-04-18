@@ -76,7 +76,8 @@ class Profile(models.Model):
     img_url = models.CharField(
         default="https://png.pngtree.com/background/20230519/original/pngtree-girl-reading-books-in-a-picture-picture-image_2658551.jpg"
     )
-    own_list = models.ManyToManyField(Product, blank=True, related_name="own_list")
+    purchased = models.ManyToManyField(Product, blank=True, related_name="purchased")
+    favorites = models.ManyToManyField(Product, blank=True, related_name="favorites")
     wishlist = models.ManyToManyField(Product, blank=True, related_name="wishlist")
 
 

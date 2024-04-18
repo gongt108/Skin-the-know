@@ -461,11 +461,6 @@ class ProfileViewSet(viewsets.ViewSet):
         if isinstance(user, AnonymousUser):
             return Response("User not signed in.", status=400)
 
-        first_name = request.data.get("first_name").strip() or user.first_name
-        last_name = request.data.get("last_name").strip() or user.last_name
-        email = request.data.get("email").strip() or user.email
-
-        # print(request.data)
         try:
             for field_name in request.data:
                 setattr(user, field_name, request.data.get(field_name).strip())
@@ -490,3 +485,19 @@ class ProfileViewSet(viewsets.ViewSet):
             return Response(serializer.data)
         else:
             return Response("User not signed in.", status=400)
+
+    @action(detail=False, methods=["put"])
+    def add_to_list(self, request):
+        user = request.user
+        if isinstance(user, AnonymousUser):
+            return Response("User not signed in.", status=400)
+        list_name = request.data.get("list")
+        product_pk = request.data.get("product_pk")
+        product = Product.objects.get(id=product_pk)
+
+        try:
+            getattr(user.profile, list_name).add(product)
+            user.profile.save()
+            return Response(f"Successfully added to {list_name.capitalize()}.")
+        except Exception as e:
+            return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
