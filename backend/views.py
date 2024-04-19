@@ -98,6 +98,7 @@ def get_product_data(request, unique_identifier):
 
         # Serialize the Product object into a dictionary
         product_data = {
+            "id": product_info.id,
             "name": product_info.name,
             "brand": product_info.brand.name if product_info.brand else None,
             "ingredients": [],
@@ -194,6 +195,15 @@ class ProductViewSet(viewsets.ViewSet):
         )
 
         serializer = ProductSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=["get"])
+    def get_product_data(self, request):
+        slug = request.query_params.get("slug")
+        product = Product.objects.get(unique_identifier=slug)
+        serializer = ProductSerializer(product, many=False)
+
+        print(serializer.data)
         return Response(serializer.data)
 
     @action(detail=True, methods=["get"])
@@ -496,8 +506,12 @@ class ProfileViewSet(viewsets.ViewSet):
         product = Product.objects.get(id=product_pk)
 
         try:
-            getattr(user.profile, list_name).add(product)
-            user.profile.save()
-            return Response(f"Successfully added to {list_name.capitalize()}.")
+            list_to_add = getattr(user.profile, list_name)
+            if product in list_to_add.all():
+                return Response(f"Already added to {list_name.capitalize()}.")
+            else:
+                list_to_add.add(product)
+                user.profile.save()
+                return Response(f"Successfully added to {list_name.capitalize()}.")
         except Exception as e:
             return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)

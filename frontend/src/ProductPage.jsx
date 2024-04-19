@@ -27,8 +27,14 @@ function ProductPage() {
 	useEffect(() => {
 		axios
 			.get(`http://localhost:8000/api/product/${slug}`)
+			// .get(`http://localhost:8000/api/products/get_product_data/`, {
+			// 	params: {
+			// 		slug: slug,
+			// 	},
+			// })
 			.then((response) => {
 				setProductInfo(response.data);
+				console.log(response.data);
 			})
 			.catch((err) => {
 				console.error('Error retrieving product info:', err);
@@ -55,13 +61,12 @@ function ProductPage() {
 	};
 
 	const addToList = (list) => {
-		console.log(list);
 		axios
 			.put(
 				'http://localhost:8000/api/profile/add_to_list/',
 				{
 					list: list,
-					product_pk: 400,
+					product_pk: productInfo.id,
 				},
 				{
 					headers: {
@@ -72,7 +77,6 @@ function ProductPage() {
 				}
 			)
 			.then((response) => {
-				// console.log(response.data);
 				notify(response.data);
 			})
 			.catch((err) => {
@@ -158,7 +162,7 @@ function ProductPage() {
 								{productInfo.name}
 							</h2>
 							<a href="/" className="text-lg underline text-teal-500">
-								{productInfo.brand}
+								{productInfo.brand.name}
 							</a>
 							{productInfo.num_reviews === 0 ? (
 								<p className="my-4">No reviews yet</p>

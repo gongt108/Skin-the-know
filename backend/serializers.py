@@ -28,6 +28,7 @@ class SkinConcernSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    brand = BrandSerializer(many=False)
     ingredients = IngredientSerializer(many=True)
     main_active = IngredientSerializer(many=True)
 
