@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Dropdown, DropdownItem } from 'flowbite-react';
 import { useParams } from 'react-router-dom';
 import Cookies from 'universal-cookie';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const customTheme = {
 	color: {
@@ -70,15 +72,31 @@ function ProductPage() {
 				}
 			)
 			.then((response) => {
-				console.log(response.data);
+				// console.log(response.data);
+				notify(response.data);
 			})
 			.catch((err) => {
 				console.error(err);
 			});
 	};
 
+	// dynamically set notification based on button clicked
+	const notify = (message) => {
+		toast(message, {
+			position: 'top-right',
+			autoClose: 2000,
+			hideProgressBar: true,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true,
+			progress: undefined,
+			theme: 'dark',
+		});
+	};
+
 	return (
 		<div className="w-[60rem] mx-auto flex">
+			<ToastContainer />
 			{productInfo && (
 				<div className="flex w-full">
 					<div className="w-1/2 h-full p-16 flex flex-col align-middle">
