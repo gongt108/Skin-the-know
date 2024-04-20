@@ -510,7 +510,9 @@ class ProfileViewSet(viewsets.ViewSet):
             return Response(serializer.data)
 
         except Exception as e:
-            return Response(f"There are no lists named {list_name}.", status=404)
+            return Response(
+                f"There are no lists named {list_name.capitalize()}.", status=404
+            )
 
         return Response(list_name)
 
