@@ -195,14 +195,14 @@ function Profile() {
 
 				<ul className="flex justify-between ms-4 me-8">
 					<li className="underline text-cyan-500">
-						<a href="/mylist/favorites">Favorites</a>
+						<a href="/mylists/favorites">Favorites</a>
 					</li>
 					<li className="underline text-cyan-500">
-						<a href="/">Purchased</a>
+						<a href="/mylists/purchased">Purchased</a>
 					</li>
 
 					<li className="underline text-cyan-500">
-						<a href="/">Wishlist</a>
+						<a href="/mylists/wishlist">Wishlist</a>
 					</li>
 				</ul>
 			</div>

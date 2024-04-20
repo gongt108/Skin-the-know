@@ -496,6 +496,24 @@ class ProfileViewSet(viewsets.ViewSet):
         else:
             return Response("User not signed in.", status=400)
 
+    @action(detail=False, methods=["get"])
+    def get_list_products(self, request):
+        user = request.user
+        if isinstance(user, AnonymousUser):
+            return Response("User not signed in.", status=400)
+
+        list_name = request.query_params.get("list_name")
+        try:
+            list = getattr(user.profile, list_name)
+            queryset = list.all()
+            serializer = ProductSerializer(queryset, many=True)
+            return Response(serializer.data)
+
+        except Exception as e:
+            return Response(f"There are no lists named {list_name}.", status=404)
+
+        return Response(list_name)
+
     @action(detail=False, methods=["put"])
     def add_to_list(self, request):
         user = request.user
