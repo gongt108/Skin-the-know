@@ -27,11 +27,6 @@ function ProductPage() {
 	useEffect(() => {
 		axios
 			.get(`http://localhost:8000/api/product/${slug}`)
-			// .get(`http://localhost:8000/api/products/get_product_data/`, {
-			// 	params: {
-			// 		slug: slug,
-			// 	},
-			// })
 			.then((response) => {
 				setProductInfo(response.data);
 				console.log(response.data);
