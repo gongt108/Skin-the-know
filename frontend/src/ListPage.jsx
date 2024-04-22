@@ -31,7 +31,6 @@ function ListPage() {
 				}
 			)
 			.then((response) => {
-				console.log(response.data);
 				setProducts(response.data);
 				setError(null);
 				setIsLoading(false);
@@ -41,7 +40,7 @@ function ListPage() {
 				setIsLoading(false);
 				setError(err.response);
 			});
-	}, []);
+	}, [products]);
 
 	const addToList = (list, productId) => {
 		axios
@@ -61,6 +60,31 @@ function ListPage() {
 			)
 			.then((response) => {
 				notify(response.data);
+			})
+			.catch((err) => {
+				console.error(err);
+			});
+	};
+
+	const deleteFromList = (productId) => {
+		axios
+			.put(
+				'http://localhost:8000/api/profile/delete_from_list/',
+				{
+					list: listName,
+					product_pk: productId,
+				},
+				{
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRFToken': cookies.get('csrftoken'),
+					},
+					withCredentials: true,
+				}
+			)
+			.then((response) => {
+				setProducts(response.data);
+				notify(`Successfully removed from ${listName}`);
 			})
 			.catch((err) => {
 				console.error(err);
@@ -162,6 +186,7 @@ function ListPage() {
 								<FaRegTrashAlt
 									size={20}
 									className="cursor-pointer hover:text-red-500"
+									onClick={() => deleteFromList(product.id)}
 								/>
 							</div>
 						</tr>

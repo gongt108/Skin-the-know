@@ -535,3 +535,24 @@ class ProfileViewSet(viewsets.ViewSet):
                 return Response(f"Successfully added to {list_name.capitalize()}.")
         except Exception as e:
             return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @action(detail=False, methods=["put"])
+    def delete_from_list(self, request):
+        user = request.user
+        if isinstance(user, AnonymousUser):
+            return Response("User not signed in.", status=400)
+        list_name = request.data.get("list")
+        product_pk = request.data.get("product_pk")
+        product = Product.objects.get(id=product_pk)
+
+        try:
+            list = getattr(user.profile, list_name)
+            if product in list.all():
+                list.remove(product)
+                user.profile.save()
+                queryset = list.all()
+                serializer = ProductSerializer(queryset, many=True)
+                return Response(serializer.data)
+
+        except Exception as e:
+            return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
