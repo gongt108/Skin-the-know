@@ -14,6 +14,7 @@ from functools import reduce
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
+from rest_framework.status import HTTP_401_UNAUTHORIZED
 import json
 
 from .models import Product, Ingredient, Brand, SkinConcern, Schedule, Week, Profile
@@ -300,7 +301,7 @@ class WeekViewSet(viewsets.ViewSet):
     def get_schedule(self, request):
         user = request.user
         if isinstance(user, AnonymousUser):
-            return Response("User not signed in.", status=400)
+            return Response("User not signed in.", status=HTTP_401_UNAUTHORIZED)
         weeks = user.week_set.all()
         if not weeks.exists():
             return Response(
@@ -456,13 +457,12 @@ class ProfileViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"])
     def account_details(self, request):
         user = request.user
+        if isinstance(user, AnonymousUser):
+            return Response("User not signed in.", status=HTTP_401_UNAUTHORIZED)
 
-        if not isinstance(user, AnonymousUser):
-            queryset = user.profile
-            serializer = ProfileSerializer(queryset, many=False)
-            return Response(serializer.data)
-        else:
-            return Response("User not signed in.", status=400)
+        queryset = user.profile
+        serializer = ProfileSerializer(queryset, many=False)
+        return Response(serializer.data)
 
     @action(detail=False, methods=["put"])
     def update_account(self, request):
@@ -500,7 +500,7 @@ class ProfileViewSet(viewsets.ViewSet):
     def get_list_products(self, request):
         user = request.user
         if isinstance(user, AnonymousUser):
-            return Response("User not signed in.", status=400)
+            return Response("User not signed in.", status=HTTP_401_UNAUTHORIZED)
 
         list_name = request.query_params.get("list_name")
         try:

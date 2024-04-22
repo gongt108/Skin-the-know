@@ -34,8 +34,6 @@ function Schedule() {
 			})
 			.then((response) => {
 				const data = response.data;
-				console.log(data);
-				// Check if the response indicates that no schedule was found
 
 				// If a schedule was found, update the state with the data
 				setWeeks(data['weeks']);
@@ -46,9 +44,13 @@ function Schedule() {
 				setIsLoading(false);
 			})
 			.catch((err) => {
-				console.error('Error retrieving schedule:', err);
-				setError(err);
-				setIsLoading(false);
+				if (err.response.status == '401') {
+					navigateTo('/login');
+				} else {
+					console.error('Error retrieving schedule:', err);
+					setError(err);
+					setIsLoading(false);
+				}
 			});
 	}, [week]);
 

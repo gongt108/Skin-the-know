@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import WeekCard from './components/WeekCard';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
+import { useNavigate } from 'react-router-dom';
 
 function Profile() {
 	const [isLoading, setIsLoading] = useState(true);
@@ -13,6 +14,7 @@ function Profile() {
 		email: '',
 	});
 	const cookies = new Cookies();
+	const navigateTo = useNavigate();
 	const token = cookies.get('csrftoken');
 
 	useEffect(() => {
@@ -35,6 +37,9 @@ function Profile() {
 			})
 			.catch((err) => {
 				console.error('Error fetching user information:', err);
+				if (err.response.status == '401') {
+					navigateTo('/login');
+				}
 			});
 	}, []);
 
