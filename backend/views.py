@@ -78,8 +78,6 @@ def logout_view(request):
 
 @ensure_csrf_cookie
 def session_view(request):
-    print(request.user)
-
     if not request.user.is_authenticated:
         return JsonResponse({"isauthenticated": False})
 
@@ -213,6 +211,22 @@ class ProductViewSet(viewsets.ViewSet):
         ingredients = product.ingredients.all()
         serializer = IngredientSerializer(ingredients, many=True)
         return Response(serializer.data)
+
+    @action(detail=False, methods=["get", "put"])
+    def get_user_rating(self, request):
+        if not request.user.is_authenticated:
+            return JsonResponse({"isauthenticated": False})
+
+        user = request.user
+        slug = request.query_params.get("slug")
+        product = Product.objects.get(unique_identifier=slug)
+        found_review = product.review_set.filter(user=user)
+
+        if not found_review.exists():
+            return JsonResponse({"isauthenticated": True, "user_review": None})
+        else:
+            user_rating = found_review.first().rating
+            return JsonResponse({"isauthenticated": True, "user_review": user_rating})
 
 
 class IngredientViewSet(viewsets.ViewSet):

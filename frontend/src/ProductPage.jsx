@@ -22,6 +22,7 @@ function ProductPage() {
 	const [productInfo, setProductInfo] = useState();
 	const [isCollapsed, setIsCollapsed] = useState(true);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [userReview, setUserReview] = useState(null);
 	const cookies = new Cookies();
 	const { slug } = useParams();
 
@@ -30,22 +31,31 @@ function ProductPage() {
 			.get(`http://localhost:8000/api/product/${slug}`)
 			.then((response) => {
 				setProductInfo(response.data);
-				console.log(response.data);
 			})
 			.catch((err) => {
 				console.error('Error retrieving product info:', err);
 			});
 
 		axios
-			.get('http://localhost:8000/api/session/', {
+			.get('http://localhost:8000/api/products/get_user_rating/', {
 				headers: {
 					'Content-Type': 'application/json',
 					'X-CSRFToken': cookies.get('csrftoken'),
 				},
+				params: {
+					slug: slug,
+				},
 				withCredentials: true,
 			})
 			.then((response) => {
-				setIsLoggedIn(response.data.isauthenticated);
+				const data = response.data;
+				if (!data.isauthenticated) {
+					setIsLoggedIn(false);
+				} else {
+					setIsLoggedIn(true);
+					setUserReview(data.user_review);
+				}
+				console.log(response.data);
 			})
 			.catch((err) => {
 				console.error(err);
@@ -117,8 +127,6 @@ function ProductPage() {
 								)}
 							>
 								<DropdownItem
-									// as="a"
-									// href="/"
 									style={{ color: 'inherit', textDecoration: 'none' }}
 									onMouseEnter={(e) => (e.target.style.color = '#112554')}
 									onMouseLeave={(e) => (e.target.style.color = 'inherit')}
@@ -128,8 +136,6 @@ function ProductPage() {
 									Favorites{' '}
 								</DropdownItem>
 								<DropdownItem
-									// as="a"
-									// href="/"
 									style={{ color: 'inherit', textDecoration: 'none' }}
 									onMouseEnter={(e) => (e.target.style.color = '#112554')}
 									onMouseLeave={(e) => (e.target.style.color = 'inherit')}
@@ -164,12 +170,30 @@ function ProductPage() {
 								<p className="my-4">No reviews yet</p>
 							) : (
 								<div className="flex items-center mb-2 justify-between">
-									<div className="flex items-center">
-										<FaStar className="me-2 " />
+									<div className="flex flex-col">
+										<div className="flex items-center">
+											{productInfo.rating}
+											<FaStar className="ms-1 " />
+										</div>
 										{productInfo.num_reviews} Review(s)
 									</div>
 									{isLoggedIn && (
-										<div className="flex items-center">My rating: </div>
+										<div className="flex items-center">
+											{userReview ? (
+												<div className="flex flex-col">
+													<div className="flex justify-end">
+														My rating:
+														<div className="ms-1 underline cursor-pointer hover:text-teal-500">
+															{userReview}
+														</div>
+													</div>
+												</div>
+											) : (
+												<div className="underline cursor-pointer hover:text-teal-500">
+													Add a Rating
+												</div>
+											)}
+										</div>
 									)}
 								</div>
 							)}
