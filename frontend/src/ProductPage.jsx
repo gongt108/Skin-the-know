@@ -22,7 +22,9 @@ function ProductPage() {
 	const [productInfo, setProductInfo] = useState();
 	const [isCollapsed, setIsCollapsed] = useState(true);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [isRating, setRating] = useState(false);
 	const [userReview, setUserReview] = useState(null);
+	const [newRating, setNewRating] = useState(userReview);
 	const cookies = new Cookies();
 	const { slug } = useParams();
 
@@ -178,7 +180,7 @@ function ProductPage() {
 										{productInfo.num_reviews} Review(s)
 									</div>
 									{isLoggedIn && (
-										<div className="flex items-center">
+										<div className="flex items-center relative">
 											{userReview ? (
 												<div className="flex flex-col">
 													<div className="flex justify-end">
@@ -191,6 +193,83 @@ function ProductPage() {
 											) : (
 												<div className="underline cursor-pointer hover:text-teal-500">
 													Add a Rating
+												</div>
+											)}
+											{!isRating && (
+												<div className="absolute top-8 border rounded-md bg-white">
+													<form action="#" className="flex flex-col">
+														<label for="star1" class="inline-flex items-center">
+															<input
+																type="radio"
+																name="rating"
+																id="star1"
+																value="1"
+																class="mr-1"
+															/>
+															<span>
+																<FaStar />
+															</span>
+														</label>
+														<label for="star2" class="inline-flex items-center">
+															<input
+																type="radio"
+																name="rating"
+																id="star2"
+																value="2"
+																class="mr-1"
+															/>
+															<span className="flex">
+																<FaStar />
+																<FaStar />
+															</span>
+														</label>
+														<label for="star3" class="inline-flex items-center">
+															<input
+																type="radio"
+																name="rating"
+																id="star3"
+																value="3"
+																class="mr-1"
+															/>
+															<span className="flex">
+																<FaStar />
+																<FaStar />
+																<FaStar />
+															</span>
+														</label>
+														<label for="star4" class="inline-flex items-center">
+															<input
+																type="radio"
+																name="rating"
+																id="star4"
+																value="4"
+																class="mr-1"
+															/>
+															<span className="flex">
+																<FaStar />
+																<FaStar />
+																<FaStar />
+																<FaStar />
+															</span>
+														</label>
+														<label for="star5" class="inline-flex items-center">
+															<input
+																type="radio"
+																name="rating"
+																id="star5"
+																value="5"
+																class="mr-1"
+															/>
+															<span className="flex">
+																<FaStar />
+																<FaStar />
+																<FaStar />
+																<FaStar />
+																<FaStar />
+															</span>
+														</label>
+														<button>Save</button>
+													</form>
 												</div>
 											)}
 										</div>
