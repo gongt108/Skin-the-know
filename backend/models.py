@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 # Create your models here.
@@ -62,6 +63,36 @@ class Product(models.Model):
         brand_name_slug = slugify(self.brand.name)
         product_name_slug = slugify(self.name)
         return f"{brand_name_slug}-{product_name_slug}"
+
+    def update_num_reviews(self):
+        self.num_reviews = self.review_set.count()
+        self.save()
+
+    def update_avg_reviews(self):
+        reviews = self.review_set.all()
+        if reviews:
+            total_rating = sum(review.rating for review in reviews)
+            average_rating = total_rating / len(reviews)
+            self.rating = round(average_rating, 1)
+        else:
+            self.rating = 0.0
+        self.save()
+
+
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    rating = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )  # Scale of 1-5
+
+    class Meta:
+        unique_together = ("user", "product")
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.product.update_num_reviews()
+        self.product.update_avg_reviews()
 
 
 class SkinConcern(models.Model):

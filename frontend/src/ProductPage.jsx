@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Dropdown, DropdownItem } from 'flowbite-react';
 import { useParams } from 'react-router-dom';
 import Cookies from 'universal-cookie';
+import { FaRegStar, FaStar } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -162,9 +163,15 @@ function ProductPage() {
 							{productInfo.num_reviews === 0 ? (
 								<p className="my-4">No reviews yet</p>
 							) : (
-								{
-									/* Render reviews */
-								}
+								<div className="flex items-center mb-2 justify-between">
+									<div className="flex items-center">
+										<FaStar className="me-2 " />
+										{productInfo.num_reviews} Review(s)
+									</div>
+									{isLoggedIn && (
+										<div className="flex items-center">My rating: </div>
+									)}
+								</div>
 							)}
 						</div>
 						<div>
