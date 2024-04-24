@@ -354,7 +354,7 @@ function Schedule() {
 				>
 					<div
 						tabIndex={1}
-						className="absolute top-1/3  w-fit h-fit bg-slate-800 rounded-md text-white font-lg flex flex-col p-8
+						className="absolute top-1/3 w-fit h-fit bg-slate-800 rounded-md text-white font-lg flex flex-col p-8
 					"
 					>
 						<form action="#" onChange={handleNameChange}>

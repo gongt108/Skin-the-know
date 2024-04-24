@@ -22,7 +22,7 @@ function ProductPage() {
 	const [productInfo, setProductInfo] = useState();
 	const [isCollapsed, setIsCollapsed] = useState(true);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const [isRating, setRating] = useState(false);
+	const [isRating, setIsRating] = useState(false);
 	const [userReview, setUserReview] = useState(null);
 	const [newRating, setNewRating] = useState(userReview);
 	const cookies = new Cookies();
@@ -185,91 +185,20 @@ function ProductPage() {
 												<div className="flex flex-col">
 													<div className="flex justify-end">
 														My rating:
-														<div className="ms-1 underline cursor-pointer hover:text-teal-500">
+														<div
+															className="ms-1 underline cursor-pointer hover:text-teal-500"
+															onClick={() => setIsRating(true)}
+														>
 															{userReview}
 														</div>
 													</div>
 												</div>
 											) : (
-												<div className="underline cursor-pointer hover:text-teal-500">
+												<div
+													className="underline cursor-pointer hover:text-teal-500"
+													onClick={() => setIsRating(true)}
+												>
 													Add a Rating
-												</div>
-											)}
-											{!isRating && (
-												<div className="absolute top-8 border rounded-md bg-white">
-													<form action="#" className="flex flex-col">
-														<label for="star1" class="inline-flex items-center">
-															<input
-																type="radio"
-																name="rating"
-																id="star1"
-																value="1"
-																class="mr-1"
-															/>
-															<span>
-																<FaStar />
-															</span>
-														</label>
-														<label for="star2" class="inline-flex items-center">
-															<input
-																type="radio"
-																name="rating"
-																id="star2"
-																value="2"
-																class="mr-1"
-															/>
-															<span className="flex">
-																<FaStar />
-																<FaStar />
-															</span>
-														</label>
-														<label for="star3" class="inline-flex items-center">
-															<input
-																type="radio"
-																name="rating"
-																id="star3"
-																value="3"
-																class="mr-1"
-															/>
-															<span className="flex">
-																<FaStar />
-																<FaStar />
-																<FaStar />
-															</span>
-														</label>
-														<label for="star4" class="inline-flex items-center">
-															<input
-																type="radio"
-																name="rating"
-																id="star4"
-																value="4"
-																class="mr-1"
-															/>
-															<span className="flex">
-																<FaStar />
-																<FaStar />
-																<FaStar />
-																<FaStar />
-															</span>
-														</label>
-														<label for="star5" class="inline-flex items-center">
-															<input
-																type="radio"
-																name="rating"
-																id="star5"
-																value="5"
-																class="mr-1"
-															/>
-															<span className="flex">
-																<FaStar />
-																<FaStar />
-																<FaStar />
-																<FaStar />
-																<FaStar />
-															</span>
-														</label>
-														<button>Save</button>
-													</form>
 												</div>
 											)}
 										</div>
@@ -363,6 +292,101 @@ function ProductPage() {
 									.join(', ')}
 							</ul>
 						</div>
+					</div>
+				</div>
+			)}
+			{isRating && (
+				<div
+					className="absolute top-0 left-0 flex justify-center h-full w-full bg-gray-800 bg-opacity-30"
+					onClick={(e) => {
+						if (e.currentTarget === e.target) {
+							setIsRating(false);
+						}
+					}}
+				>
+					<div className="absolute w-[15rem] top-1/3 border rounded-md bg-white py-2 px-4">
+						<div className="flex w-full justify-between">
+							<h3 className="mb-2">Add/Change Rating</h3>
+							<p
+								className="hover:underline cursor-pointer text-gray-400"
+								onClick={() => setIsRating(false)}
+							>
+								X
+							</p>
+						</div>
+						<form action="#" className="flex flex-col ms-2">
+							<label htmlFor="star1" className="inline-flex items-center">
+								<input
+									type="radio"
+									name="rating"
+									id="star1"
+									value="1"
+									className="mr-1"
+								/>
+								<span>
+									<FaStar />
+								</span>
+							</label>
+							<label htmlFor="star2" className="inline-flex items-center">
+								<input
+									type="radio"
+									name="rating"
+									id="star2"
+									value="2"
+									className="mr-1"
+								/>
+								<span className="flex">
+									<FaStar />
+									<FaStar />
+								</span>
+							</label>
+							<label htmlFor="star3" className="inline-flex items-center">
+								<input
+									type="radio"
+									name="rating"
+									id="star3"
+									value="3"
+									className="mr-1"
+								/>
+								<span className="flex">
+									<FaStar />
+									<FaStar />
+									<FaStar />
+								</span>
+							</label>
+							<label htmlFor="star4" className="inline-flex items-center">
+								<input
+									type="radio"
+									name="rating"
+									id="star4"
+									value="4"
+									className="mr-1"
+								/>
+								<span className="flex">
+									<FaStar />
+									<FaStar />
+									<FaStar />
+									<FaStar />
+								</span>
+							</label>
+							<label htmlFor="star5" className="inline-flex items-center">
+								<input
+									type="radio"
+									name="rating"
+									id="star5"
+									value="5"
+									className="mr-1"
+								/>
+								<span className="flex">
+									<FaStar />
+									<FaStar />
+									<FaStar />
+									<FaStar />
+									<FaStar />
+								</span>
+							</label>
+							<button className="mt-2">Save</button>
+						</form>
 					</div>
 				</div>
 			)}
