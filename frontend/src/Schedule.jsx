@@ -344,15 +344,29 @@ function Schedule() {
 			</div>
 			{/* Edit Name Modal */}
 			{isEditing && (
-				<div className="absolute top-0 left-0 flex justify-center h-full w-full bg-gray-800 bg-opacity-30">
-					<div className="absolute top-1/3  w-fit h-fit bg-slate-800 rounded-md text-white font-lg flex flex-col p-8">
+				<div
+					className="absolute top-0 left-0 flex justify-center h-full w-full bg-gray-800 bg-opacity-30"
+					onClick={(e) => {
+						if (e.currentTarget === e.target) {
+							setIsEditing(false);
+						}
+					}}
+				>
+					<div
+						tabIndex={1}
+						className="absolute top-1/3  w-fit h-fit bg-slate-800 rounded-md text-white font-lg flex flex-col p-8
+					"
+					>
 						<form action="#" onChange={handleNameChange}>
+							<h2 className="font-semibold text-lg text-white">
+								Rename Routine
+							</h2>
 							<input
 								type="text"
 								placeholder={scheduleName}
-								className="text-black"
+								className="text-black my-2"
 							/>
-							<div className="flex space-x-4 mx-auto">
+							<div className="flex space-x-4 mx-auto mt-2">
 								<Button onClick={renameRoutine}>Confirm</Button>
 								<Button
 									color="gray"
