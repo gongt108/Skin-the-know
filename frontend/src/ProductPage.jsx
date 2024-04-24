@@ -93,6 +93,7 @@ function ProductPage() {
 					} else {
 						setIsLoggedIn(true);
 						setUserReview(data.user_review);
+						setIsRating(false);
 					}
 				})
 				.catch((err) => {
