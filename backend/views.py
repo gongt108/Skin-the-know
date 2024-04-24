@@ -17,7 +17,16 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_401_UNAUTHORIZED
 import json
 
-from .models import Product, Ingredient, Brand, SkinConcern, Schedule, Week, Profile
+from .models import (
+    Product,
+    Ingredient,
+    Brand,
+    SkinConcern,
+    Schedule,
+    Week,
+    Profile,
+    Review,
+)
 from .serializers import (
     BrandSerializer,
     IngredientSerializer,
@@ -220,13 +229,20 @@ class ProductViewSet(viewsets.ViewSet):
         user = request.user
         slug = request.query_params.get("slug")
         product = Product.objects.get(unique_identifier=slug)
-        found_review = product.review_set.filter(user=user)
 
-        if not found_review.exists():
+        try:
+            found_review = product.review_set.get(user=user)
+        except Review.DoesNotExist:
             return JsonResponse({"isauthenticated": True, "user_review": None})
-        else:
-            user_rating = found_review.first().rating
-            return JsonResponse({"isauthenticated": True, "user_review": user_rating})
+
+        if request.method == "PUT":
+            new_rating = request.data.get("new_rating")
+            if new_rating is not None and found_review:
+                found_review.rating = new_rating
+                found_review.save()
+
+        user_rating = found_review.rating
+        return JsonResponse({"isauthenticated": True, "user_review": user_rating})
 
 
 class IngredientViewSet(viewsets.ViewSet):

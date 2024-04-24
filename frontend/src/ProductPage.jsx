@@ -57,7 +57,6 @@ function ProductPage() {
 					setIsLoggedIn(true);
 					setUserReview(data.user_review);
 				}
-				console.log(response.data);
 			})
 			.catch((err) => {
 				console.error(err);
@@ -66,6 +65,40 @@ function ProductPage() {
 
 	const toggleCollapse = () => {
 		setIsCollapsed(!isCollapsed);
+	};
+
+	const saveRating = (e) => {
+		e.preventDefault();
+		if (newRating) {
+			console.log(newRating);
+			axios
+				.put(
+					'http://localhost:8000/api/products/get_user_rating/',
+					{ new_rating: newRating },
+					{
+						headers: {
+							'Content-Type': 'application/json',
+							'X-CSRFToken': cookies.get('csrftoken'),
+						},
+						params: {
+							slug: slug,
+						},
+						withCredentials: true,
+					}
+				)
+				.then((response) => {
+					const data = response.data;
+					if (!data.isauthenticated) {
+						setIsLoggedIn(false);
+					} else {
+						setIsLoggedIn(true);
+						setUserReview(data.user_review);
+					}
+				})
+				.catch((err) => {
+					console.error(err);
+				});
+		}
 	};
 
 	const addToList = (list) => {
@@ -301,6 +334,7 @@ function ProductPage() {
 					onClick={(e) => {
 						if (e.currentTarget === e.target) {
 							setIsRating(false);
+							setNewRating(null);
 						}
 					}}
 				>
@@ -309,12 +343,21 @@ function ProductPage() {
 							<h3 className="mb-2">Add/Change Rating</h3>
 							<p
 								className="hover:underline cursor-pointer text-gray-400"
-								onClick={() => setIsRating(false)}
+								onClick={() => {
+									setIsRating(false);
+									setNewRating(null);
+								}}
 							>
 								X
 							</p>
 						</div>
-						<form action="#" className="flex flex-col ms-2">
+						<form
+							action="#"
+							className="flex flex-col ms-2"
+							onChange={(e) => {
+								setNewRating(e.target.value);
+							}}
+						>
 							<label htmlFor="star1" className="inline-flex items-center">
 								<input
 									type="radio"
@@ -385,7 +428,9 @@ function ProductPage() {
 									<FaStar />
 								</span>
 							</label>
-							<button className="mt-2">Save</button>
+							<button className="mt-2 hover:underline" onClick={saveRating}>
+								Save
+							</button>
 						</form>
 					</div>
 				</div>
