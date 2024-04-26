@@ -327,8 +327,8 @@ class WeekViewSet(viewsets.ViewSet):
         serializer = WeekSerializer(week)
         return Response(serializer.data)
 
-    @action(detail=False, methods=["get"])
-    def get_schedule(self, request):
+    @action(detail=True, methods=["get"])
+    def get_schedule(self, request, pk=None):
         user = request.user
         if isinstance(user, AnonymousUser):
             return Response("User not signed in.", status=HTTP_401_UNAUTHORIZED)
@@ -337,15 +337,14 @@ class WeekViewSet(viewsets.ViewSet):
             return Response(
                 "Weekly schedule not found.", status=status.HTTP_404_NOT_FOUND
             )
+        print(pk)
         index = request.query_params.get("week")
-        if index == "-1":
+        if pk == "-1":
             week = weeks.first()
         else:
-            # index = int(index)
-            week = weeks.get(id=index)
+            week = weeks.get(id=pk)
 
         weeks_serializer = WeekSerializer(weeks, many=True)
-        # week_serializer = WeekSerializer(week, many=False)
 
         schedules = week.schedule_set.all()
 
@@ -353,6 +352,7 @@ class WeekViewSet(viewsets.ViewSet):
         for schedule in schedules:
             products = schedule.products.all()
             product_serializer = ProductSerializer(products, many=True)
+
             # Serialize schedule along with its associated products
             schedule_data.append(
                 {
@@ -363,16 +363,32 @@ class WeekViewSet(viewsets.ViewSet):
 
         response_data = {
             "weeks": weeks_serializer.data,
-            # "week": week_serializer.data,
             "schedule_data": schedule_data,
             "routine_name": week.name,
             "routine_id": week.id,
         }
         return Response(response_data)
 
+    @action(detail=True, methods=["get"])
+    def get_packing_list(self, request, pk=None):
+        user = request.user
+        if isinstance(user, AnonymousUser):
+            return Response("User not signed in.", status=HTTP_401_UNAUTHORIZED)
+        week = Week(id=pk)
+        schedules = week.schedule_set.all()
+
+        schedule_data = []
+        for schedule in schedules:
+            products = schedule.products.all()
+            product_serializer = ProductSerializer(products, many=True)
+
+            schedule_data.append(
+                product_serializer.data,
+            )
+        return Response(schedule_data)
+
     @action(detail=False, methods=["put"])
     def add_routine(self, request):
-
         user = request.user
         if isinstance(user, AnonymousUser):
             return Response("User not signed in.", status=400)
@@ -401,7 +417,6 @@ class WeekViewSet(viewsets.ViewSet):
             status=200,
         )
 
-    # @action(detail=True, methods=["delete"])
     def destroy(self, request, pk=None):
         user = request.user
         if isinstance(user, AnonymousUser):
@@ -520,7 +535,7 @@ class ProfileViewSet(viewsets.ViewSet):
     def my_products(self, request):
         user = request.user
         if not isinstance(user, AnonymousUser):
-            queryset = user.profile.own_list.all()
+            queryset = user.profile.purchased.all()
             serializer = ProductSerializer(queryset, many=True)
             return Response(serializer.data)
         else:

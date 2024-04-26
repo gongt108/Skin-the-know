@@ -1,28 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import WeekCard from './components/WeekCard';
+import PackingList from './components/PackingList';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Dropdown, DropdownItem, Modal, Button } from 'flowbite-react';
 
 function Schedule() {
 	const [currentView, setCurrentView] = useState('week');
 	const [weeks, setWeeks] = useState();
-	const [week, setWeek] = useState(-1);
+	const [searchParams, setSearchParams] = useSearchParams();
+	const [week, setWeek] = useState(searchParams.get('week_id') || -1);
 	const [schedule, setSchedule] = useState([]);
 	const [scheduleName, setScheduleName] = useState('');
 	const [scheduleId, setScheduleId] = useState('');
 	const [nameChange, setNameChange] = useState('');
 	const [isEditing, setIsEditing] = useState(false);
+	const [isPacking, setIsPacking] = useState(false);
 	const [isDeleting, setIsDeleting] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState(null);
+
+	// console.log(searchParams.get('week_id'));
+
 	const cookies = new Cookies();
 	const navigateTo = useNavigate();
 
 	useEffect(() => {
 		axios
-			.get(`http://localhost:8000/api/weekly_schedule/get_schedule`, {
+			.get(`http://localhost:8000/api/weekly_schedule/${week}/get_schedule`, {
 				headers: {
 					'Content-Type': 'application/json',
 					'X-CSRFToken': cookies.get('csrftoken'),
@@ -34,6 +40,7 @@ function Schedule() {
 			})
 			.then((response) => {
 				const data = response.data;
+				console.log(data);
 
 				// If a schedule was found, update the state with the data
 				setWeeks(data['weeks']);
@@ -55,7 +62,7 @@ function Schedule() {
 	}, [week]);
 
 	const weekSelection = (i, id) => {
-		navigateTo(`/schedule?week=${i + 1}`);
+		navigateTo(`/schedule?week_id=${id}`);
 		setWeek(id);
 	};
 
