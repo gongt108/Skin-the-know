@@ -326,6 +326,12 @@ function Schedule() {
 						className="w-full border rounded-md p-2 cursor-pointer hover:bg-blue-300"
 						onClick={addRoutine}
 					>
+						Packing List
+					</div>
+					<div
+						className="w-full border rounded-md p-2 cursor-pointer hover:bg-blue-300"
+						onClick={addRoutine}
+					>
 						New Routine
 					</div>
 					<div

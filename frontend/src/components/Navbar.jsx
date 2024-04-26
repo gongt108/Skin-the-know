@@ -253,12 +253,12 @@ function Navbar() {
 										</DropdownItem>
 										<DropdownItem
 											as="a"
-											href="/"
+											href="/schedule"
 											style={{ color: 'inherit', textDecoration: 'none' }}
 											onMouseEnter={(e) => (e.target.style.color = '#112554')}
 											onMouseLeave={(e) => (e.target.style.color = 'inherit')}
 										>
-											Routine
+											Routines
 										</DropdownItem>
 										<DropdownItem
 											as="a"
