@@ -128,7 +128,7 @@ class Schedule(models.Model):
         ("PM", "PM"),
     ]
 
-    week = models.ForeignKey("Week", on_delete=models.CASCADE, null=True)
+    week = models.ForeignKey("Week", on_delete=models.CASCADE, related_name="schedules")
     products = models.ManyToManyField(
         Product, blank=True, related_name="schedule_product"
     )

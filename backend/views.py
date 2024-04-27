@@ -450,9 +450,13 @@ class ScheduleViewSet(viewsets.ViewSet):
     @action(detail=True, methods=["get", "post", "patch"])
     def view_or_update_schedule_details(self, request, pk=None):
         schedule = Schedule(id=pk)
-        print(schedule.week_id)
+
+        week = Week.objects.get(id=2)
+        related_schedules = week.schedules.all()
+        for sched in related_schedules:
+            print(sched.week)
         serializer = ScheduleSerializer(schedule, many=False)
-        # print(serializer.data)
+        print(serializer.data)
 
         if request.method == "PATCH":
             # Assuming you have product data in the request

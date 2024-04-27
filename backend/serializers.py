@@ -45,7 +45,7 @@ class WeekSerializer(serializers.ModelSerializer):
 
 
 class ScheduleSerializer(serializers.ModelSerializer):
-    week = WeekSerializer(many=False, read_only=True)
+    # week = WeekSerializer(many=False, read_only=True)
     products = ProductSerializer(many=True, read_only=True)
 
     class Meta:
