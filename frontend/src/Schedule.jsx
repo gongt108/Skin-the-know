@@ -21,8 +21,6 @@ function Schedule() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState(null);
 
-	// console.log(searchParams.get('week_id'));
-
 	const cookies = new Cookies();
 	const navigateTo = useNavigate();
 

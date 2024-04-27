@@ -37,19 +37,19 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class WeekSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Week
+        fields = "__all__"
+
+
 class ScheduleSerializer(serializers.ModelSerializer):
+    week = WeekSerializer(many=False, read_only=True)
     products = ProductSerializer(many=True, read_only=True)
 
     class Meta:
         model = Schedule
-        fields = "__all__"
-
-
-class WeekSerializer(serializers.ModelSerializer):
-    # schedules = ScheduleSerializer(many=True, source="schedule_set")
-
-    class Meta:
-        model = Week
         fields = "__all__"
 
 

@@ -55,7 +55,7 @@ function ScheduleEdit() {
 		console.log(productId);
 
 		axios
-			.put(
+			.patch(
 				`http://localhost:8000/api/schedule/${id}/view_or_update_schedule_details/`,
 				{
 					product: productId,
@@ -75,7 +75,7 @@ function ScheduleEdit() {
 		console.log(productId);
 
 		axios
-			.put(
+			.patch(
 				`http://localhost:8000/api/schedule/${id}/view_or_update_schedule_details/`,
 				{
 					product: productId,

@@ -337,8 +337,7 @@ class WeekViewSet(viewsets.ViewSet):
             return Response(
                 "Weekly schedule not found.", status=status.HTTP_404_NOT_FOUND
             )
-        print(pk)
-        index = request.query_params.get("week")
+
         if pk == "-1":
             week = weeks.first()
         else:
@@ -448,19 +447,20 @@ class ScheduleViewSet(viewsets.ViewSet):
         serializer = ScheduleSerializer(schedule)
         return Response(serializer.data)
 
-    @action(detail=True, methods=["get", "post", "put"])
+    @action(detail=True, methods=["get", "post", "patch"])
     def view_or_update_schedule_details(self, request, pk=None):
         schedule = Schedule(id=pk)
+        print(schedule.week_id)
         serializer = ScheduleSerializer(schedule, many=False)
+        # print(serializer.data)
 
-        if request.method == "PUT":
+        if request.method == "PATCH":
             # Assuming you have product data in the request
             product_id = request.data.get("product", None)
             action = request.data.get("action", None)
             if product_id is not None and action == "remove":
                 product = Product(id=product_id)
 
-                # schedule.products.add(*product_data["add"])
                 schedule.products.remove(product)
                 schedule.save()
 
@@ -468,14 +468,13 @@ class ScheduleViewSet(viewsets.ViewSet):
                 serializer = ScheduleSerializer(schedule)
                 return Response(serializer.data)
             elif product_id is not None and action == "add":
-                product = Product(id=product_id)
-
-                # schedule.products.add(*product_data["add"])
-                schedule.products.add(product)
-                schedule.save()
+                # product = Product(id=product_id)
+                # schedule.products.add(product)
+                # schedule.save()
 
                 # Serialize the updated schedule and return the response
-                serializer = ScheduleSerializer(schedule)
+                # serializer = ScheduleSerializer(schedule)
+                print(serializer.data)
                 return Response(serializer.data)
             else:
                 # If no product data is provided in the request, return a 400 Bad Request response
