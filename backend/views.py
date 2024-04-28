@@ -449,12 +449,7 @@ class ScheduleViewSet(viewsets.ViewSet):
 
     @action(detail=True, methods=["get", "post", "patch"])
     def view_or_update_schedule_details(self, request, pk=None):
-        schedule = Schedule(id=pk)
-
-        week = Week.objects.get(id=2)
-        related_schedules = week.schedules.all()
-        for sched in related_schedules:
-            print(sched.week)
+        schedule = Schedule.objects.get(id=pk)
         serializer = ScheduleSerializer(schedule, many=False)
         print(serializer.data)
 
@@ -472,12 +467,12 @@ class ScheduleViewSet(viewsets.ViewSet):
                 serializer = ScheduleSerializer(schedule)
                 return Response(serializer.data)
             elif product_id is not None and action == "add":
-                # product = Product(id=product_id)
-                # schedule.products.add(product)
-                # schedule.save()
+                product = Product.objects.get(id=product_id)
+                schedule.products.add(product)
+                schedule.save()
 
                 # Serialize the updated schedule and return the response
-                # serializer = ScheduleSerializer(schedule)
+                serializer = ScheduleSerializer(schedule)
                 print(serializer.data)
                 return Response(serializer.data)
             else:
