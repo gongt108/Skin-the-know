@@ -76,6 +76,7 @@ function Schedule() {
 			.then((response) => {
 				console.log(response.data);
 				setWeek(response.data.id);
+				navigateTo(`/schedule?week_id=${response.data.id}`);
 			})
 			.catch((err) => console.error('error creating routine:', err));
 	};
@@ -329,7 +330,7 @@ function Schedule() {
 					</div>
 					<div
 						className="w-full border rounded-md p-2 cursor-pointer hover:bg-blue-300"
-						onClick={addRoutine}
+						onClick={() => navigateTo(`/packing-list?week_id=${week}`)}
 					>
 						Packing List
 					</div>
