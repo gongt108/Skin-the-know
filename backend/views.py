@@ -370,9 +370,6 @@ class WeekViewSet(viewsets.ViewSet):
 
     @action(detail=True, methods=["get"])
     def get_packing_list(self, request, pk=None):
-        user = request.user
-        if isinstance(user, AnonymousUser):
-            return Response("User not signed in.", status=HTTP_401_UNAUTHORIZED)
         week = Week(id=pk)
         schedules = week.schedule_set.all()
 
