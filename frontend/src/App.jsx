@@ -12,6 +12,7 @@ import IngredientsList from './IngredientsList';
 import ListPage from './ListPage';
 import Login from './components/auth/Login';
 import Logout from './components/auth/Logout';
+import PackingList from './PackingList';
 import ProductPage from './ProductPage';
 import Profile from './Profile';
 import Schedule from './Schedule';
@@ -37,6 +38,7 @@ const App = () => {
 					<Route path="/mylists/:listName" element={<ListPage />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/logout" element={<Logout />} />
+					<Route path="/packing-list" element={<PackingList />} />
 					<Route path="/product/:slug" element={<ProductPage />} />
 					<Route path="/profile" element={<Profile />} />
 					<Route path="/schedule" element={<Schedule />} />

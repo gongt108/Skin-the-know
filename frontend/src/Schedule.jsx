@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import WeekCard from './components/WeekCard';
-import PackingList from './components/PackingList';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -42,6 +41,7 @@ function Schedule() {
 
 				// If a schedule was found, update the state with the data
 				setWeeks(data['weeks']);
+				setWeek(data['routine_id']);
 				setSchedule(data['schedule_data']);
 				setScheduleName(data['routine_name']);
 				setScheduleId(data['routine_id']);

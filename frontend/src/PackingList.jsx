@@ -2,8 +2,8 @@ import React from 'react';
 
 function PackingList() {
 	return (
-		<div>
-			<table>
+		<div className="w-[60rem] mx-auto">
+			<table className="w-full">
 				<thead>
 					<tr>
 						<td>Product</td>
@@ -13,8 +13,8 @@ function PackingList() {
 				</thead>
 				<tbody>
 					<tr>
-						<td>
-							<img src="" alt="Product image" />
+						<td className="flex">
+							<img src="" alt="Product image" className="me-2" />
 							<p>Product Name</p>
 						</td>
 						<td>
