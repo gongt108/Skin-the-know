@@ -6,6 +6,7 @@ import { Dropdown, DropdownItem, Modal, Button } from 'flowbite-react';
 function PackingList() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState(null);
+	const [products, setProducts] = useState();
 	const [searchParams, setSearchParams] = useSearchParams();
 	const week = searchParams.get('week_id');
 
@@ -15,26 +16,20 @@ function PackingList() {
 			.then((response) => {
 				const data = response.data;
 				console.log(data);
-
-				// If a schedule was found, update the state with the data
-				// setWeeks(data['weeks']);
-				// setWeek(data['routine_id']);
-				// setSchedule(data['schedule_data']);
-				// setScheduleName(data['routine_name']);
-				// setScheduleId(data['routine_id']);
+				setProducts(response.data);
 				setError(null);
 				setIsLoading(false);
 			})
 			.catch((err) => {
-				if (err.response.status == '401') {
-					navigateTo('/login');
-				} else {
-					console.error('Error retrieving schedule:', err);
-					setError(err);
-					setIsLoading(false);
-				}
+				console.error('Error retrieving packing list:', err);
+				setError(err);
+				setIsLoading(false);
 			});
 	}, [week]);
+
+	if (isLoading) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<div className="w-[60rem] mx-auto">
@@ -47,18 +42,25 @@ function PackingList() {
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td className="flex">
-							<img src="" alt="Product image" className="me-2" />
-							<p>Product Name</p>
-						</td>
-						<td>
-							<input type="checkbox" />
-						</td>
-						<td>
-							<input type="checkbox" />
-						</td>
-					</tr>
+					{products.length > 0 &&
+						products.map((product) => (
+							<tr key={product.id} className="even:bg-white odd:bg-gray-100">
+								<td className="flex">
+									<img
+										src={product.img_url}
+										alt="Product image"
+										className="h-10 w-10 object-contain me-2"
+									/>
+									<p>{product.name}</p>
+								</td>
+								<td>
+									<input type="checkbox" />
+								</td>
+								<td>
+									<input type="checkbox" />
+								</td>
+							</tr>
+						))}
 				</tbody>
 			</table>
 		</div>
