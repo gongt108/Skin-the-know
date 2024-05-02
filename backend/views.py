@@ -373,15 +373,14 @@ class WeekViewSet(viewsets.ViewSet):
         week = Week(id=pk)
         schedules = week.schedule_set.all()
 
-        schedule_data = []
+        unique_product_data = set()
         for schedule in schedules:
             products = schedule.products.all()
-            product_serializer = ProductSerializer(products, many=True)
 
-            schedule_data.append(
-                product_serializer.data,
-            )
-        return Response(schedule_data)
+            unique_product_data.update(products)
+        product_serializer = ProductSerializer(unique_product_data, many=True)
+
+        return Response(product_serializer.data)
 
     @action(detail=False, methods=["put"])
     def add_routine(self, request):
