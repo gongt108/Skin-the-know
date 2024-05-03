@@ -8,15 +8,15 @@ function PackingList() {
 	const [error, setError] = useState(null);
 	const [products, setProducts] = useState();
 	const [searchParams, setSearchParams] = useSearchParams();
+	const [name, setName] = useState('');
 	const week = searchParams.get('week_id');
 
 	useEffect(() => {
 		axios
 			.get(`http://localhost:8000/api/weekly_schedule/${week}/get_packing_list`)
 			.then((response) => {
-				const data = response.data;
-				console.log(data);
-				setProducts(response.data);
+				setName(response.data.name);
+				setProducts(response.data.products);
 				setError(null);
 				setIsLoading(false);
 			})
@@ -33,6 +33,9 @@ function PackingList() {
 
 	return (
 		<div className="w-[60rem] mx-auto">
+			<h1 className="flex font-semibold text-2xl text-center my-8">
+				{name} Packing List
+			</h1>
 			<table className="w-full">
 				<thead>
 					<tr>

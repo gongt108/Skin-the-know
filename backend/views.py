@@ -370,7 +370,8 @@ class WeekViewSet(viewsets.ViewSet):
 
     @action(detail=True, methods=["get"])
     def get_packing_list(self, request, pk=None):
-        week = Week(id=pk)
+        week = Week.objects.get(id=pk)
+        # print(week.name)
         schedules = week.schedule_set.all()
 
         unique_product_data = set()
@@ -380,7 +381,7 @@ class WeekViewSet(viewsets.ViewSet):
             unique_product_data.update(products)
         product_serializer = ProductSerializer(unique_product_data, many=True)
 
-        return Response(product_serializer.data)
+        return Response({"name": week.name, "products": product_serializer.data})
 
     @action(detail=False, methods=["put"])
     def add_routine(self, request):
