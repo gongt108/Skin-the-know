@@ -102,17 +102,16 @@ function ScheduleEdit() {
 
 	return (
 		<div className="w-[60rem] flex flex-col mx-auto">
-			<div className="flex justify-between">
+			<div className="flex">
 				<p
 					className="flex items-center mt-4 hover:underline hover:text-blue-500"
 					onClick={() => navigateTo(-1)}
 				>
 					<IoIosArrowBack size={18} className="me-2" /> Go Back
 				</p>
-				<h2 className="flex font-semibold text-3xl my-8">
+				<h2 className="flex font-semibold text-3xl my-8 mx-auto">
 					{schedule.day} {schedule.time} Routine
 				</h2>
-				<div></div>
 			</div>
 
 			{/* Current schedule  */}

@@ -14,7 +14,7 @@ function ProductGrid() {
 	}, []);
 
 	return (
-		<div className="mx-auto w-[60rem] mt-8">
+		<div className="mx-auto w-[60rem] mt-8 flex">
 			<div className="grid grid-cols-5 gap-4">
 				<div className="bg-gray-300 py-4 text-2xl font-semibold row-span-2 flex items-center justify-center text-center">
 					Top Rated Products

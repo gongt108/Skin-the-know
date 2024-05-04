@@ -4,7 +4,7 @@ import ProductGrid from './components/ProductGrid';
 
 function Home() {
 	return (
-		<div className="h-screen">
+		<div className="h-screen flex flex-col w-full">
 			<Carousel />
 			<ProductGrid />
 		</div>
