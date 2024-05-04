@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
-
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { FaTrash, FaPlusSquare } from 'react-icons/fa';
+import { IoIosArrowBack } from 'react-icons/io';
 
 function ScheduleEdit() {
 	const { param1 } = useParams();
@@ -13,6 +13,7 @@ function ScheduleEdit() {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const cookies = new Cookies();
+	const navigateTo = useNavigate();
 
 	useEffect(() => {
 		let myScheduleData = axios.get(
@@ -101,9 +102,18 @@ function ScheduleEdit() {
 
 	return (
 		<div className="w-[60rem] flex flex-col mx-auto">
-			<h2 className="flex mx-auto font-semibold text-3xl my-8">
-				{schedule.day} {schedule.time} Routine
-			</h2>
+			<div className="flex justify-between">
+				<p
+					className="flex items-center mt-4 hover:underline hover:text-blue-500"
+					onClick={() => navigateTo(-1)}
+				>
+					<IoIosArrowBack size={18} className="me-2" /> Go Back
+				</p>
+				<h2 className="flex font-semibold text-3xl my-8">
+					{schedule.day} {schedule.time} Routine
+				</h2>
+				<div></div>
+			</div>
 
 			{/* Current schedule  */}
 			<table className="border">

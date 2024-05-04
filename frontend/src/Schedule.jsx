@@ -235,7 +235,7 @@ function Schedule() {
 												<div className="flex justify-between px-2">
 													<h3 className="flex text-lg font-semibold">PM</h3>
 													<a
-														href={`/edit-schedule-${item.schedule.id}`}
+														href={`/schedule/${item.schedule.day}-${item.schedule.time}-${item.schedule.id}`}
 														className="text-sm"
 													>
 														Revise
