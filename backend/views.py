@@ -233,7 +233,10 @@ class ProductViewSet(viewsets.ViewSet):
         try:
             found_review = product.review_set.get(user=user)
         except Review.DoesNotExist:
-            return JsonResponse({"isauthenticated": True, "user_review": None})
+            if request.method == "GET":
+                return JsonResponse({"isauthenticated": True, "user_review": None})
+            elif request.method == "PUT":
+                found_review = product.review_set.create(user=user, rating=0.0)
 
         if request.method == "PUT":
             new_rating = request.data.get("new_rating")

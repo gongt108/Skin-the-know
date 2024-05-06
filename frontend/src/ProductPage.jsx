@@ -87,6 +87,7 @@ function ProductPage() {
 					}
 				)
 				.then((response) => {
+					console.log(response.data);
 					const data = response.data;
 					if (!data.isauthenticated) {
 						setIsLoggedIn(false);
@@ -202,43 +203,45 @@ function ProductPage() {
 							<a href="/" className="text-lg underline text-teal-500">
 								{productInfo.brand.name}
 							</a>
-							{productInfo.num_reviews === 0 ? (
-								<p className="my-4">No reviews yet</p>
-							) : (
-								<div className="flex items-center mb-2 justify-between">
-									<div className="flex flex-col">
-										<div className="flex items-center">
-											{productInfo.rating}
-											<FaStar className="ms-1 " />
+							<div className="flex items-center mb-2 justify-between">
+								{productInfo.num_reviews === 0 ? (
+									<p className="my-4">No reviews yet</p>
+								) : (
+									<div className="flex items-center mb-2 justify-between">
+										<div className="flex flex-col">
+											<div className="flex items-center">
+												{productInfo.rating}
+												<FaStar className="ms-1 " />
+											</div>
+											{productInfo.num_reviews} Review(s)
 										</div>
-										{productInfo.num_reviews} Review(s)
 									</div>
-									{isLoggedIn && (
-										<div className="flex items-center relative">
-											{userReview ? (
-												<div className="flex flex-col">
-													<div className="flex justify-end">
-														My rating:
-														<div
-															className="ms-1 underline cursor-pointer hover:text-teal-500"
-															onClick={() => setIsRating(true)}
-														>
-															{userReview}
-														</div>
+								)}
+								{isLoggedIn && (
+									<div className="flex items-center relative">
+										{userReview ? (
+											<div className="flex flex-col">
+												<div className="flex justify-end">
+													My rating:
+													<div
+														className="ms-1 underline cursor-pointer hover:text-teal-500"
+														onClick={() => setIsRating(true)}
+													>
+														{userReview}
 													</div>
 												</div>
-											) : (
-												<div
-													className="underline cursor-pointer hover:text-teal-500"
-													onClick={() => setIsRating(true)}
-												>
-													Add a Rating
-												</div>
-											)}
-										</div>
-									)}
-								</div>
-							)}
+											</div>
+										) : (
+											<div
+												className="underline cursor-pointer hover:text-teal-500"
+												onClick={() => setIsRating(true)}
+											>
+												Add a Rating
+											</div>
+										)}
+									</div>
+								)}
+							</div>
 						</div>
 						<div>
 							{productInfo.ingredients.some(
