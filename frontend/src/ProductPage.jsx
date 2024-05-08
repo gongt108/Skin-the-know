@@ -203,17 +203,19 @@ function ProductPage() {
 							<a href="/" className="text-lg underline text-teal-500">
 								{productInfo.brand.name}
 							</a>
-							<div className="flex items-center mb-2 justify-between">
+							<div className="flex flex-col my-2">
 								{productInfo.num_reviews === 0 ? (
-									<p className="my-4">No reviews yet</p>
+									<p className="my-2">No reviews yet</p>
 								) : (
-									<div className="flex items-center mb-2 justify-between">
-										<div className="flex flex-col">
+									<div className="flex items-center justify-between">
+										<div className="flex mb-1">
 											<div className="flex items-center">
 												{productInfo.rating}
 												<FaStar className="ms-1 " />
 											</div>
-											{productInfo.num_reviews} Review(s)
+											<div className="ms-4">
+												{productInfo.num_reviews} Review(s)
+											</div>
 										</div>
 									</div>
 								)}
@@ -221,7 +223,7 @@ function ProductPage() {
 									<div className="flex items-center relative">
 										{userReview ? (
 											<div className="flex flex-col">
-												<div className="flex justify-end">
+												<div className="flex justify-end mb-2">
 													My rating:
 													<div
 														className="ms-1 underline cursor-pointer hover:text-teal-500"
