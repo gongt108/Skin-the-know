@@ -61,7 +61,7 @@ function ProductPage() {
 			.catch((err) => {
 				console.error(err);
 			});
-	}, [slug]);
+	}, [slug, userReview]);
 
 	const toggleCollapse = () => {
 		setIsCollapsed(!isCollapsed);
