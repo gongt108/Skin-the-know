@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import {
+	useNavigate,
+	useParams,
+	useSearchParams,
+	useLocation,
+} from 'react-router-dom';
 import { Dropdown, DropdownItem, Modal, Button } from 'flowbite-react';
 import { IoPrint } from 'react-icons/io5';
 import { IoIosArrowBack } from 'react-icons/io';
+import { IoShareOutline } from 'react-icons/io5';
 
 function PackingList() {
 	const [isLoading, setIsLoading] = useState(true);
@@ -13,6 +19,7 @@ function PackingList() {
 	const [name, setName] = useState('');
 	const week = searchParams.get('week_id');
 	const navigateTo = useNavigate();
+	const location = useLocation();
 
 	useEffect(() => {
 		axios
@@ -34,6 +41,12 @@ function PackingList() {
 		return <div>Loading...</div>;
 	}
 
+	const copySharePath = () => {
+		navigator.clipboard.writeText(
+			`http://localhost:5173${location.pathname}?week_id=${week}`
+		);
+	};
+
 	return (
 		<div className="w-[60rem] mx-auto">
 			<p
@@ -46,14 +59,19 @@ function PackingList() {
 				<h1 className="flex font-semibold text-2xl text-center my-4">
 					{name} Packing List
 				</h1>
-				<p
-					onClick={() => {
-						window.print();
-					}}
-					className="me-4"
-				>
-					<IoPrint size={20} />
-				</p>
+				<div className="flex">
+					<p onClick={copySharePath} className="me-4 cursor-pointer">
+						<IoShareOutline size={20} />
+					</p>
+					<p
+						onClick={() => {
+							window.print();
+						}}
+						className="me-4"
+					>
+						<IoPrint size={20} />
+					</p>
+				</div>
 			</div>
 			<table className="w-full">
 				<thead>
